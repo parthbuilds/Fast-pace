@@ -509,12 +509,24 @@ export default function LeadFinderPage() {
                       <LeadStatusBadge status={lead.status || 'NEW'} />
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      <Link
-                        href={`/leads/${lead.id}`}
-                        className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-600/30 border border-blue-200 dark:border-blue-500/30 text-[11px] font-semibold transition-colors"
-                      >
-                        Lead 360 &rarr;
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.name + ' ' + (lead.address || ''))}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-750 text-[11px] font-semibold transition-colors flex items-center gap-1"
+                          title="Verify location on Google Maps"
+                        >
+                          <MapPin className="w-3 h-3 text-rose-500" />
+                          <span>Maps</span>
+                        </a>
+                        <Link
+                          href={`/leads/${lead.id}`}
+                          className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-600/30 border border-blue-200 dark:border-blue-500/30 text-[11px] font-semibold transition-colors whitespace-nowrap"
+                        >
+                          Lead 360 &rarr;
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -28,6 +28,7 @@ import {
   FileQuestion,
   Loader2,
   Trash2,
+  MapPin,
   CalendarClock,
 } from 'lucide-react';
 import { LEAD_STATUS_CONFIG, formatCurrency, formatDate, formatRelativeTime } from '@/lib/utils';
@@ -379,6 +380,16 @@ export default function LeadDetailPage() {
               <span>Call</span>
             </a>
           )}
+
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(biz.name + ' ' + (biz.address || ''))}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-all hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer shadow-sm"
+          >
+            <MapPin className="w-3.5 h-3.5 text-rose-500" />
+            <span>Verify on Google Maps</span>
+          </a>
         </div>
       </div>
 
@@ -440,13 +451,26 @@ export default function LeadDetailPage() {
                     href={biz.website}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium"
+                    className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium truncate max-w-full"
                   >
-                    <span>{biz.website}</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <span className="truncate">{biz.website}</span>
+                    <ExternalLink className="w-3 h-3 flex-shrink-0" />
                   </a>
                 ) : (
                   <span className="text-rose-600 dark:text-rose-400 font-semibold">⚠️ No official website</span>
+                )}
+              </div>
+              <div>
+                <span className="text-slate-500 block text-[11px]">Email Address</span>
+                {biz.email ? (
+                  <a
+                    href={`mailto:${biz.email}`}
+                    className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium truncate max-w-full"
+                  >
+                    <span className="truncate">{biz.email}</span>
+                  </a>
+                ) : (
+                  <span className="text-slate-400 dark:text-slate-500 italic">No email listed</span>
                 )}
               </div>
               <div>

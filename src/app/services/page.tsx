@@ -12,8 +12,12 @@ import {
   Laptop,
   Bot,
   TrendingUp,
+  Cpu,
+  Coins,
+  DollarSign,
+  AlertCircle,
 } from 'lucide-react';
-import { SOFTWARE_MODULES } from '@/lib/intelligence';
+import { SOFTWARE_MODULES, SoftwareModule } from '@/lib/intelligence';
 import { formatCurrency } from '@/lib/utils';
 
 // Detailed mapping of deliverables and value propositions per software module
@@ -163,6 +167,9 @@ export default function ServicesPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>(['business_website']);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'web' | 'automation' | 'ai' | 'operations'>('all');
+  
+  // Custom price overrides state
+  const [customPrices, setCustomPrices] = useState<Record<string, number>>({});
 
   // Filter modules based on category tab
   const filteredModules = useMemo(() => {
@@ -174,9 +181,10 @@ export default function ServicesPage() {
   const totalCost = useMemo(() => {
     return selectedIds.reduce((sum, id) => {
       const mod = SOFTWARE_MODULES.find((m) => m.id === id);
-      return sum + (mod?.basePriceUSD || 0);
+      const price = customPrices[id] !== undefined ? customPrices[id] : (mod?.basePriceUSD || 0);
+      return sum + price;
     }, 0);
-  }, [selectedIds]);
+  }, [selectedIds, customPrices]);
 
   const totalWeeks = useMemo(() => {
     return selectedIds.reduce((sum, id) => {
@@ -194,10 +202,33 @@ export default function ServicesPage() {
     return 799;
   }, [totalCost, selectedIds]);
 
+  // Sum client third-party monthly recurring cost
+  const totalClientMonthlyCost = useMemo(() => {
+    return selectedIds.reduce((sum, id) => {
+      const mod = SOFTWARE_MODULES.find((m) => m.id === id);
+      return sum + (mod?.clientMonthlyCost || 0);
+    }, 0);
+  }, [selectedIds]);
+
+  // Sum developer's monthly tools / maintenance self cost
+  const totalDevSelfCost = useMemo(() => {
+    return selectedIds.reduce((sum, id) => {
+      const mod = SOFTWARE_MODULES.find((m) => m.id === id);
+      return sum + (mod?.devSelfCost || 0);
+    }, 0);
+  }, [selectedIds]);
+
   const toggleModule = (id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
+  };
+
+  const handlePriceChange = (id: string, value: number) => {
+    setCustomPrices((prev) => ({
+      ...prev,
+      [id]: Math.max(0, value),
+    }));
   };
 
   // Generate a premium copyable freelance proposal draft
@@ -206,14 +237,18 @@ export default function ServicesPage() {
     let draft = `### Freelance Software Solution Proposal\n\n`;
     draft += `**Estimated Project Timeline:** ${totalWeeks} Weeks\n`;
     draft += `**Total Build Investment:** ${formatCurrency(totalCost)} USD\n`;
+    draft += `**Estimated Client Running Cost:** ${formatCurrency(totalClientMonthlyCost)} USD/month (paid directly to SaaS/API providers)\n`;
     draft += `**Monthly Support & Maintenance Retainer:** ${formatCurrency(monthlyRetainer)} USD/month\n\n`;
     draft += `---\n\n`;
-    draft += `#### Scope of Deliverables\n\n`;
+    draft += `#### Scope of Deliverables & Technologies\n\n`;
 
     selectedModules.forEach((m, idx) => {
       const details = MODULE_DETAILS_MAP[m.id];
-      draft += `${idx + 1}. **${m.name}** (${formatCurrency(m.basePriceUSD)} | ${m.estimatedWeeks} Weeks)\n`;
+      const price = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePriceUSD;
+      draft += `${idx + 1}. **${m.name}** (${formatCurrency(price)} | ${m.estimatedWeeks} Weeks)\n`;
       draft += `   *Description:* ${m.description}\n`;
+      draft += `   *Core Technologies:* ${m.techStack.join(', ')}\n`;
+      draft += `   *Third-Party Running Cost:* ${formatCurrency(m.clientMonthlyCost)} USD/month\n`;
       if (details) {
         draft += `   *What You Receive:*\n`;
         details.deliverables.forEach((d) => {
@@ -230,7 +265,7 @@ export default function ServicesPage() {
     draft += `- **20% Production Deployment & Launch:** ${formatCurrency(totalCost * 0.2)} USD\n\n`;
     draft += `*Note: Hosting fees, custom API credits, and third-party subscription charges are client responsibilities. Net-15 invoicing rules apply.*`;
     return draft;
-  }, [selectedIds, totalCost, totalWeeks, monthlyRetainer]);
+  }, [selectedIds, totalCost, totalWeeks, monthlyRetainer, customPrices, totalClientMonthlyCost]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(proposalDraftText);
@@ -284,6 +319,7 @@ export default function ServicesPage() {
             {filteredModules.map((module) => {
               const isSelected = selectedIds.includes(module.id);
               const details = MODULE_DETAILS_MAP[module.id];
+              const displayPrice = customPrices[module.id] !== undefined ? customPrices[module.id] : module.basePriceUSD;
               return (
                 <div
                   key={module.id}
@@ -339,15 +375,27 @@ export default function ServicesPage() {
                     </div>
 
                     {/* Module Description */}
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
                       {module.description}
                     </p>
+
+                    {/* Tools and Tech display */}
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {module.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="text-[9px] bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded border border-slate-200/50 dark:border-slate-700/50"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
 
                     {/* What They Receive Checkmarks */}
                     {details && (
                       <div className="space-y-2 mb-4">
                         <h4 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-                          What They Receive:
+                          Key Deliverables:
                         </h4>
                         <ul className="space-y-1.5">
                           {details.deliverables.slice(0, 3).map((item, idx) => (
@@ -367,19 +415,27 @@ export default function ServicesPage() {
                   </div>
 
                   {/* Pricing / Duration bottom bar */}
-                  <div className="border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-4 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {module.estimatedWeeks} {module.estimatedWeeks === 1 ? 'Week' : 'Weeks'}
-                      </span>
+                  <div className="border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-4 space-y-2">
+                    {/* Recurring details */}
+                    <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                      <span>Client recurring: <strong>${module.clientMonthlyCost}/mo</strong></span>
+                      <span>Self-cost: <strong>${module.devSelfCost}/mo</strong></span>
                     </div>
 
-                    <div className="flex items-baseline gap-1 text-slate-900 dark:text-white font-bold">
-                      <span className="text-[10px] text-slate-400 font-medium">Est. Build</span>
-                      <span className="text-sm text-indigo-600 dark:text-indigo-400">
-                        {formatCurrency(module.basePriceUSD)}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                          {module.estimatedWeeks} {module.estimatedWeeks === 1 ? 'Week' : 'Weeks'}
+                        </span>
+                      </div>
+
+                      <div className="flex items-baseline gap-1 text-slate-900 dark:text-white font-bold">
+                        <span className="text-[10px] text-slate-400 font-medium">Est. Build</span>
+                        <span className="text-sm text-indigo-600 dark:text-indigo-400">
+                          {formatCurrency(displayPrice)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -424,6 +480,30 @@ export default function ServicesPage() {
               </div>
             </div>
 
+            {/* Recurring cost details */}
+            {selectedIds.length > 0 && (
+              <div className="bg-slate-800/25 border border-slate-850 rounded-xl p-3 space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400 flex items-center gap-1.5">
+                    <Coins className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Client Recurring:</span>
+                  </span>
+                  <span className="font-bold text-white">${totalClientMonthlyCost}/mo</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400 flex items-center gap-1.5">
+                    <Cpu className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Developer Self-Cost:</span>
+                  </span>
+                  <span className="font-bold text-slate-300">${totalDevSelfCost}/mo</span>
+                </div>
+                <div className="pt-1.5 border-t border-slate-800/80 flex items-center gap-1 text-[10px] text-indigo-400 italic">
+                  <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                  <span>SaaS subscriptions are billed directly to client.</span>
+                </div>
+              </div>
+            )}
+
             {/* Monthly Retainer */}
             <div className="bg-slate-800/40 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
               <div>
@@ -440,24 +520,42 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            {/* Selected Modules Summary */}
-            <div className="space-y-2">
+            {/* Selected Modules Summary & Customizable Inputs */}
+            <div className="space-y-3">
               <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Selected Modules ({selectedIds.length})
+                Custom Modules & Pricing ({selectedIds.length})
               </h3>
               {selectedIds.length === 0 ? (
                 <p className="text-xs text-slate-500 italic">No modules selected. Select cards to calculate.</p>
               ) : (
-                <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
-                  {SOFTWARE_MODULES.filter((m) => selectedIds.includes(m.id)).map((m) => (
-                    <div
-                      key={m.id}
-                      className="flex items-center justify-between text-xs text-slate-300 bg-slate-800/60 p-2 rounded-lg border border-slate-800/50"
-                    >
-                      <span className="font-medium truncate mr-2">{m.name}</span>
-                      <span className="text-slate-400 flex-shrink-0">{formatCurrency(m.basePriceUSD)}</span>
-                    </div>
-                  ))}
+                <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                  {SOFTWARE_MODULES.filter((m) => selectedIds.includes(m.id)).map((m) => {
+                    const currentPrice = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePriceUSD;
+                    return (
+                      <div
+                        key={m.id}
+                        className="flex flex-col gap-1.5 text-xs text-slate-300 bg-slate-800/60 p-2.5 rounded-lg border border-slate-800/50"
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="font-semibold text-white truncate pr-2">{m.name}</span>
+                          <span className="text-[10px] text-slate-400 flex-shrink-0">{m.estimatedWeeks} wks</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-[10px] text-slate-400 block truncate">Tech: {m.techStack.slice(0, 2).join(', ')}</span>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[10px] text-slate-500 font-bold">$</span>
+                            <input
+                              type="number"
+                              value={currentPrice}
+                              onChange={(e) => handlePriceChange(m.id, Number(e.target.value))}
+                              onClick={(e) => e.stopPropagation()} // Prevent card toggle if clicked
+                              className="w-16 bg-slate-900 border border-slate-700/80 rounded px-1 py-0.5 text-right text-white text-xs font-bold focus:outline-none focus:border-indigo-500"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -466,7 +564,7 @@ export default function ServicesPage() {
             {selectedIds.length > 0 && (
               <div className="space-y-2.5 pt-2 border-t border-slate-800">
                 <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Standard Payment Milestones
+                  Standard Payment Schedule
                 </h4>
                 <div className="space-y-1.5 text-xs text-slate-300">
                   <div className="flex justify-between">

@@ -6,6 +6,9 @@ export interface SoftwareModule {
   estimatedWeeks: number;
   basePriceUSD: number;
   highlightTag: string;
+  techStack: string[];
+  clientMonthlyCost: number;
+  devSelfCost: number;
 }
 
 export const SOFTWARE_MODULES: SoftwareModule[] = [
@@ -17,6 +20,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1200,
     highlightTag: 'Web Presence',
+    techStack: ['Next.js', 'Vercel', 'Tailwind CSS', 'Framer Motion'],
+    clientMonthlyCost: 15,
+    devSelfCost: 0,
   },
   {
     id: 'website_redesign',
@@ -26,6 +32,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1000,
     highlightTag: 'Modernization',
+    techStack: ['Next.js', 'Lighthouse Optimization', 'Vercel'],
+    clientMonthlyCost: 15,
+    devSelfCost: 0,
   },
   {
     id: 'appointment_booking',
@@ -35,6 +44,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1500,
     highlightTag: 'Booking',
+    techStack: ['Cal.com API', 'Supabase Database', 'Stripe Payments'],
+    clientMonthlyCost: 29,
+    devSelfCost: 0,
   },
   {
     id: 'whatsapp_automation',
@@ -44,6 +56,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 1,
     basePriceUSD: 800,
     highlightTag: 'WhatsApp',
+    techStack: ['Meta Cloud API', 'Make.com Workflow', 'NodeJS Hooks'],
+    clientMonthlyCost: 45,
+    devSelfCost: 9,
   },
   {
     id: 'lead_crm',
@@ -53,6 +68,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 3,
     basePriceUSD: 2200,
     highlightTag: 'Sales OS',
+    techStack: ['NextJS Dashboard', 'Supabase Postgres', 'Prisma ORM'],
+    clientMonthlyCost: 25,
+    devSelfCost: 0,
   },
   {
     id: 'online_ordering_menu',
@@ -62,6 +80,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 3,
     basePriceUSD: 1800,
     highlightTag: 'Direct Sales',
+    techStack: ['Next.js PWA', 'Supabase Database', 'Stripe checkout'],
+    clientMonthlyCost: 35,
+    devSelfCost: 0,
   },
   {
     id: 'customer_loyalty',
@@ -71,6 +92,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1400,
     highlightTag: 'Retention',
+    techStack: ['Supabase DB', 'Clerk Auth', 'WhatsApp templates'],
+    clientMonthlyCost: 20,
+    devSelfCost: 0,
   },
   {
     id: 'payment_billing',
@@ -80,6 +104,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 1,
     basePriceUSD: 900,
     highlightTag: 'Payments',
+    techStack: ['Stripe API', 'Razorpay Checkout', 'Make.com Hooks'],
+    clientMonthlyCost: 15,
+    devSelfCost: 0,
   },
   {
     id: 'analytics_dashboard',
@@ -89,6 +116,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1600,
     highlightTag: 'Intelligence',
+    techStack: ['Tremor Charts', 'NextJS App', 'Tinybird Analytics'],
+    clientMonthlyCost: 20,
+    devSelfCost: 0,
   },
   {
     id: 'ai_chatbot',
@@ -98,6 +128,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1400,
     highlightTag: 'AI Automation',
+    techStack: ['OpenAI Assistants API', 'Pinecone Vector DB', 'NextJS'],
+    clientMonthlyCost: 30,
+    devSelfCost: 5,
   },
   {
     id: 'internal_portal',
@@ -107,6 +140,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 4,
     basePriceUSD: 2800,
     highlightTag: 'Internal Tool',
+    techStack: ['NextJS Server Actions', 'Clerk Team auth', 'Supabase'],
+    clientMonthlyCost: 35,
+    devSelfCost: 0,
   },
   {
     id: 'ai_voice_agent',
@@ -116,6 +152,9 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     estimatedWeeks: 2,
     basePriceUSD: 1800,
     highlightTag: 'AI Voice',
+    techStack: ['Vapi.ai SDK', 'Bland.ai API', 'Twilio Webhooks', 'Cal.com'],
+    clientMonthlyCost: 80,
+    devSelfCost: 10,
   },
 ];
 
