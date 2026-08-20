@@ -1,0 +1,812 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  console.log('Seeding Fast Pace OS database with realistic HSR Layout & Bangalore prospects...');
+
+  // 1. Clear existing test data
+  await prisma.interaction.deleteMany();
+  await prisma.followUp.deleteMany();
+  await prisma.discovery.deleteMany();
+  await prisma.opportunity.deleteMany();
+  await prisma.businessAudit.deleteMany();
+  await prisma.proposal.deleteMany();
+  await prisma.project.deleteMany();
+  await prisma.client.deleteMany();
+  await prisma.lead.deleteMany();
+  await prisma.business.deleteMany();
+  await prisma.setting.deleteMany();
+
+  // 2. Default Settings
+  await prisma.setting.createMany({
+    data: [
+      {
+        key: 'profile',
+        value: JSON.stringify({
+          developerName: 'Parth',
+          agencyName: 'Velocity Software Studio',
+          email: 'parth@velocitystudio.io',
+          phone: '+91 98765 43210',
+          whatsapp: '+919876543210',
+          services: 'Modern High-Speed Websites, WhatsApp Automations, Custom CRMs, and Booking Engines',
+          city: 'Bangalore',
+        }),
+      },
+      {
+        key: 'default_city',
+        value: 'HSR Layout, Bangalore',
+      },
+    ],
+  });
+
+  // 3. Realistic Demo Businesses
+  const demoData = [
+    {
+      osmId: 'node_hsr_001',
+      name: 'Aura Dental Care & Implant Centre',
+      category: 'Clinics',
+      subcategory: 'Dental Clinic',
+      address: '14th Main Rd, Sector 4, HSR Layout',
+      area: 'HSR Layout Sector 4',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9114,
+      longitude: 77.6442,
+      distanceKm: 0.4,
+      phone: '+91 98450 12345',
+      website: 'https://auradentalcare-demo.in',
+      email: 'contact@auradentalcare-demo.in',
+      openingHours: 'Mo-Sa 09:30-20:00',
+      rating: 4.7,
+      reviewCount: 142,
+      leadStatus: 'INTERESTED',
+      leadScore: 88,
+      opportunityScore: 92,
+      priority: 'URGENT',
+      estimatedValue: 2400,
+      qualificationStatus: 'QUALIFIED',
+      hasProblem: 'YES',
+      decisionMaker: 'YES',
+      budgetPotential: 'HIGH',
+      urgency: 'HIGH',
+      techComplexity: 'MEDIUM',
+      closeProbability: 'HIGH',
+      notes: 'Spoke with Dr. Rajesh. Front desk loses 15+ patient appointments weekly due to uncoordinated manual WhatsApp messages. Interested in automated WhatsApp booking & treatment reminder engine.',
+      audit: {
+        websiteStatus: 'NEEDS_IMPROVEMENT',
+        isReachable: true,
+        isHttps: true,
+        mobileFriendly: false,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: false,
+        hasEmail: true,
+        hasContactForm: false,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 40,
+        overallScore: 48,
+        summaryText: 'Basic WordPress site without responsive mobile viewport or appointment self-booking. Missing WhatsApp direct consultation hook.',
+      },
+      opportunities: [
+        {
+          type: 'APPOINTMENT_BOOKING',
+          title: 'Patient Self-Booking Calendar',
+          description: 'Interactive slot selector syncs directly with Dr. Rajesh and Dr. Priya calendars.',
+          confidenceScore: 95,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'WHATSAPP',
+          title: 'Automated 24h WhatsApp Reminders',
+          description: 'Automated 24h & 2h appointment confirmations reducing clinic no-shows by 40%.',
+          confidenceScore: 92,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'CRM',
+          title: 'Patient Treatment & Follow-up Tracker',
+          description: 'Prevent patient churn by automating 6-month checkup reminders.',
+          confidenceScore: 85,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [
+        {
+          type: 'CALLED',
+          summary: 'Initial discovery phone call with Clinic Manager (Anita)',
+          details: 'Discussed patient booking bottlenecks and manual WhatsApp reminder load.',
+          sentiment: 'POSITIVE',
+        },
+        {
+          type: 'WHATSAPP_SENT',
+          summary: 'Sent 1-page breakdown of automated booking system on WhatsApp',
+          details: 'Anita acknowledged receipt and forwarded to Dr. Rajesh.',
+          sentiment: 'POSITIVE',
+        },
+      ],
+      followUp: {
+        dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24), // tomorrow
+        reason: 'Review proposal preview & confirm 15-minute demo on Thursday',
+        notes: 'Dr. Rajesh is free between 2:00 PM and 3:30 PM.',
+      },
+    },
+    {
+      osmId: 'node_hsr_002',
+      name: 'Olive Bistro & Woodfired Kitchen',
+      category: 'Restaurants',
+      subcategory: 'Italian / Cafe',
+      address: '27th Main Rd, Sector 1, HSR Layout',
+      area: 'HSR Layout Sector 1',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9168,
+      longitude: 77.6512,
+      distanceKm: 0.9,
+      phone: '+91 80 4123 9900',
+      website: '', // No website
+      email: '',
+      openingHours: 'Mo-Su 11:30-23:00',
+      rating: 4.5,
+      reviewCount: 389,
+      leadStatus: 'NEW',
+      leadScore: 78,
+      opportunityScore: 95,
+      priority: 'URGENT',
+      estimatedValue: 1800,
+      qualificationStatus: null,
+      notes: 'No official website found on Google / OSM. Currently relying 100% on Swiggy/Zomato paying 28% commission on deliveries.',
+      audit: {
+        websiteStatus: 'NO_WEBSITE',
+        isReachable: false,
+        isHttps: false,
+        mobileFriendly: false,
+        hasContactInfo: false,
+        hasPhoneVisible: false,
+        hasWhatsApp: false,
+        hasEmail: false,
+        hasContactForm: false,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 0,
+        overallScore: 0,
+        summaryText: 'No website URL is listed in public records. Building an initial high-speed web presence and direct takeaway ordering is a high-priority opportunity.',
+      },
+      opportunities: [
+        {
+          type: 'WEBSITE',
+          title: 'Boutique Brand Website & Digital Menu',
+          description: 'High-aesthetic culinary showcase featuring woodfired pizzas and ambience photography.',
+          confidenceScore: 95,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'ONLINE_ORDERING',
+          title: 'Direct Takeaway Ordering Engine',
+          description: 'Direct zero-commission customer pickup and delivery orders with UPI integration.',
+          confidenceScore: 90,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'WHATSAPP',
+          title: 'WhatsApp Table Reservation Bot',
+          description: 'Automated table bookings for weekend dinners.',
+          confidenceScore: 85,
+          estimatedImpact: 'MEDIUM',
+        },
+      ],
+      interactions: [],
+      followUp: null,
+    },
+    {
+      osmId: 'node_hsr_003',
+      name: 'Vogue & Style Luxury Salon',
+      category: 'Salons',
+      subcategory: 'Hair & Skin Salon',
+      address: '19th Main, Sector 2, HSR Layout',
+      area: 'HSR Layout Sector 2',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9082,
+      longitude: 77.6498,
+      distanceKm: 0.7,
+      phone: '+91 99001 88221',
+      website: 'https://voguestyle-hsr.demo',
+      email: 'hello@voguestyle.demo',
+      openingHours: 'Mo-Su 10:00-21:00',
+      rating: 4.6,
+      reviewCount: 215,
+      leadStatus: 'PROPOSAL_SENT',
+      leadScore: 85,
+      opportunityScore: 88,
+      priority: 'HIGH',
+      estimatedValue: 1950,
+      qualificationStatus: 'QUALIFIED',
+      hasProblem: 'YES',
+      decisionMaker: 'YES',
+      budgetPotential: 'MEDIUM',
+      urgency: 'HIGH',
+      techComplexity: 'LOW',
+      closeProbability: 'HIGH',
+      notes: 'Proposal sent for ₹1,60,000 ($1,950) covering Stylist Booking Web App + WhatsApp Loyalty Points.',
+      audit: {
+        websiteStatus: 'AVERAGE',
+        isReachable: true,
+        isHttps: true,
+        mobileFriendly: true,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: false,
+        hasEmail: true,
+        hasContactForm: true,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 60,
+        overallScore: 65,
+        summaryText: 'Clean portfolio site, but completely lacks interactive appointment scheduling. Customers still forced to call the front desk.',
+      },
+      opportunities: [
+        {
+          type: 'APPOINTMENT_BOOKING',
+          title: 'Stylist Selection & Slot Booking Web App',
+          description: 'Allows clients to choose specific senior stylists and service durations.',
+          confidenceScore: 92,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'WHATSAPP',
+          title: 'WhatsApp Automated 30-Day Haircut Nudge',
+          description: 'Generates recurring salon visits by notifying clients when their next trim is due.',
+          confidenceScore: 88,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [
+        {
+          type: 'MEETING',
+          summary: 'In-person meeting at salon with Owner (Kavita)',
+          details: 'Walked through Figma wireframes and client booking prototype.',
+          sentiment: 'POSITIVE',
+        },
+        {
+          type: 'PROPOSAL',
+          summary: 'Delivered formal proposal PDF via Email and WhatsApp',
+          details: 'Total scope: 2 weeks delivery, 50% advance, 50% on live launch.',
+          sentiment: 'POSITIVE',
+        },
+      ],
+      followUp: {
+        dueDate: new Date(Date.now() + 1000 * 60 * 60 * 48), // in 2 days
+        reason: 'Check decision on proposal terms with Kavita',
+        notes: 'She mentioned reviewing with her business partner on Wednesday night.',
+      },
+    },
+    {
+      osmId: 'node_hsr_004',
+      name: 'IronPulse Fitness & CrossFit Studio',
+      category: 'Gyms',
+      subcategory: 'Fitness Centre',
+      address: '24th Main, Sector 2, HSR Layout',
+      area: 'HSR Layout Sector 2',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9095,
+      longitude: 77.6534,
+      distanceKm: 1.1,
+      phone: '+91 97411 55667',
+      website: '',
+      email: 'ironpulse.hsr@gmail.com',
+      openingHours: 'Mo-Sa 05:30-22:00, Su 07:00-14:00',
+      rating: 4.8,
+      reviewCount: 310,
+      leadStatus: 'CONTACTED',
+      leadScore: 82,
+      opportunityScore: 90,
+      priority: 'HIGH',
+      estimatedValue: 2200,
+      notes: 'Currently tracking 450+ members on Google Sheets. Expiry reminders are sent manually 1 by 1 by reception staff.',
+      audit: {
+        websiteStatus: 'NO_WEBSITE',
+        isReachable: false,
+        isHttps: false,
+        mobileFriendly: false,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: false,
+        hasEmail: true,
+        hasContactForm: false,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 0,
+        overallScore: 20,
+        summaryText: 'Gym has high local traffic and 300+ reviews but no website or automated membership portal.',
+      },
+      opportunities: [
+        {
+          type: 'MEMBERSHIP_CRM',
+          title: 'Membership & Renewal Automation CRM',
+          description: 'Automated WhatsApp alerts 7 days & 1 day before membership expires with instant payment links.',
+          confidenceScore: 95,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'WEBSITE',
+          title: 'High-Energy CrossFit Landing Page',
+          description: 'Lead generation page offering 1-Day Free Trial passes.',
+          confidenceScore: 90,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [
+        {
+          type: 'CALLED',
+          summary: 'Spoke with Head Coach & Owner (Vikram)',
+          details: 'He expressed heavy frustration with Google Sheets renewal tracking.',
+          sentiment: 'POSITIVE',
+        },
+      ],
+      followUp: {
+        dueDate: new Date(Date.now()), // Due Today
+        reason: 'Send WhatsApp demo video of the Gym Membership CRM system',
+        notes: 'Follow up at 4:00 PM before the evening gym rush.',
+      },
+    },
+    {
+      osmId: 'node_hsr_005',
+      name: 'PrimeRealty Properties & Investments',
+      category: 'Real Estate Agencies',
+      subcategory: 'Real Estate Agency',
+      address: '5th Main, Sector 6, HSR Layout',
+      area: 'HSR Layout Sector 6',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9155,
+      longitude: 77.6389,
+      distanceKm: 0.8,
+      phone: '+91 98860 99887',
+      website: 'https://primerealty-demo.in',
+      email: 'sales@primerealty-demo.in',
+      openingHours: 'Mo-Sa 09:30-19:00',
+      rating: 4.4,
+      reviewCount: 88,
+      leadStatus: 'DISCOVERY_SCHEDULED',
+      leadScore: 92,
+      opportunityScore: 94,
+      priority: 'URGENT',
+      estimatedValue: 3500,
+      qualificationStatus: 'QUALIFIED',
+      hasProblem: 'YES',
+      decisionMaker: 'YES',
+      budgetPotential: 'HIGH',
+      urgency: 'HIGH',
+      techComplexity: 'HIGH',
+      closeProbability: 'HIGH',
+      notes: 'Agency has 8 brokers. Inbound property enquiries from MagicBricks/99acres get lost or assigned to multiple brokers simultaneously.',
+      audit: {
+        websiteStatus: 'AVERAGE',
+        isReachable: true,
+        isHttps: true,
+        mobileFriendly: true,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: true,
+        hasEmail: true,
+        hasContactForm: true,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 55,
+        overallScore: 60,
+        summaryText: 'Standard template site with static listings. Lacks dynamic property filters and automated lead distribution backend.',
+      },
+      opportunities: [
+        {
+          type: 'LEAD_CRM',
+          title: 'Broker Lead Distribution & Routing CRM',
+          description: 'Instant lead parsing and round-robin allocation to agents on WhatsApp.',
+          confidenceScore: 95,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'PORTAL',
+          title: 'Interactive Property Search & Video Tour Portal',
+          description: 'Search by BHK, budget, and locality with 1-click WhatsApp broker chat.',
+          confidenceScore: 90,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [
+        {
+          type: 'CALLED',
+          summary: 'Spoke with Managing Director (Sanjay Nair)',
+          details: 'Agreed to schedule a deep discovery call.',
+          sentiment: 'POSITIVE',
+        },
+      ],
+      followUp: {
+        dueDate: new Date(Date.now() + 1000 * 60 * 60 * 20), // Tomorrow morning
+        reason: 'Conduct 30-minute structured discovery session with Sanjay',
+        notes: 'Focus on lead routing from external portals and agent commission tracking.',
+      },
+    },
+    {
+      osmId: 'node_hsr_006',
+      name: 'Ace Academy for IIT-JEE & NEET',
+      category: 'Coaching Centres',
+      subcategory: 'Education / Coaching',
+      address: '17th Cross, Sector 7, HSR Layout',
+      area: 'HSR Layout Sector 7',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9065,
+      longitude: 77.6412,
+      distanceKm: 1.2,
+      phone: '+91 80 2572 4433',
+      website: '',
+      email: 'admissions@aceacademy-hsr.demo',
+      openingHours: 'Mo-Sa 08:00-20:00',
+      rating: 4.9,
+      reviewCount: 420,
+      leadStatus: 'NEW',
+      leadScore: 84,
+      opportunityScore: 91,
+      priority: 'HIGH',
+      estimatedValue: 2800,
+      notes: 'Premier coaching institute with 600+ enrolled students. Missing modern website and student fee installment reminder system.',
+      audit: {
+        websiteStatus: 'NO_WEBSITE',
+        isReachable: false,
+        isHttps: false,
+        mobileFriendly: false,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: false,
+        hasEmail: true,
+        hasContactForm: false,
+        hasBooking: false,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: false,
+        seoSignalsScore: 0,
+        overallScore: 25,
+        summaryText: 'Established educational institute with high review count but zero official website or online admission portal.',
+      },
+      opportunities: [
+        {
+          type: 'ADMISSIONS_CRM',
+          title: 'Student Admissions & Demo Class Pipeline CRM',
+          description: 'Track walk-in inquiries and automate demo class SMS/WhatsApp reminders.',
+          confidenceScore: 92,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'PAYMENT_BILLING',
+          title: 'Automated Fee Collection & Receipt Generator',
+          description: 'Cut fee collection delays with automated WhatsApp installment reminders and receipts.',
+          confidenceScore: 90,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [],
+      followUp: null,
+    },
+    {
+      osmId: 'node_hsr_007',
+      name: 'The Grand HSR Boutique Hotel',
+      category: 'Hotels',
+      subcategory: 'Boutique Hotel',
+      address: '22nd Main Rd, Sector 1, HSR Layout',
+      area: 'HSR Layout Sector 1',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      country: 'India',
+      latitude: 12.9188,
+      longitude: 77.6545,
+      distanceKm: 1.4,
+      phone: '+91 80 4900 1122',
+      website: 'https://thegrandhsr-demo.com',
+      email: 'reservations@thegrandhsr-demo.com',
+      openingHours: 'Mo-Su 24/7',
+      rating: 4.3,
+      reviewCount: 512,
+      leadStatus: 'WON',
+      leadScore: 95,
+      opportunityScore: 70,
+      priority: 'MEDIUM',
+      estimatedValue: 4200,
+      qualificationStatus: 'QUALIFIED',
+      hasProblem: 'YES',
+      decisionMaker: 'YES',
+      budgetPotential: 'HIGH',
+      urgency: 'HIGH',
+      techComplexity: 'MEDIUM',
+      closeProbability: 'HIGH',
+      notes: 'Closed client! Building Direct Room Booking Engine + QR In-Room Dining System.',
+      audit: {
+        websiteStatus: 'AVERAGE',
+        isReachable: true,
+        isHttps: true,
+        mobileFriendly: true,
+        hasContactInfo: true,
+        hasPhoneVisible: true,
+        hasWhatsApp: false,
+        hasEmail: true,
+        hasContactForm: true,
+        hasBooking: true,
+        hasOnlineOrdering: false,
+        hasEcommerce: false,
+        hasPayment: true,
+        seoSignalsScore: 65,
+        overallScore: 70,
+        summaryText: 'Hotel website redirects to third-party booking aggregator with high commission rates.',
+      },
+      opportunities: [
+        {
+          type: 'DIRECT_BOOKING',
+          title: 'Zero-Commission Direct Room Booking Engine',
+          description: 'Bypass 18% OTA commissions with native Stripe/Razorpay checkout.',
+          confidenceScore: 95,
+          estimatedImpact: 'HIGH',
+        },
+        {
+          type: 'QR_ORDERING',
+          title: 'QR Code In-Room Dining & Housekeeping App',
+          description: 'Guests scan room QR code to order room service and request towels.',
+          confidenceScore: 90,
+          estimatedImpact: 'HIGH',
+        },
+      ],
+      interactions: [
+        {
+          type: 'WON',
+          summary: 'Signed project contract and received 50% advance deposit',
+          details: 'Project kickoff started for direct room booking and QR dining engine.',
+          sentiment: 'POSITIVE',
+        },
+      ],
+      followUp: null,
+    },
+  ];
+
+  for (const item of demoData) {
+    const business = await prisma.business.create({
+      data: {
+        osmId: item.osmId,
+        name: item.name,
+        category: item.category,
+        subcategory: item.subcategory,
+        address: item.address,
+        area: item.area,
+        city: item.city,
+        state: item.state,
+        country: item.country,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        distanceKm: item.distanceKm,
+        phone: item.phone,
+        website: item.website,
+        email: item.email,
+        openingHours: item.openingHours,
+        rating: item.rating,
+        reviewCount: item.reviewCount,
+        mapsUrl: `https://www.openstreetmap.org/node/${item.osmId.split('_')[2]}`,
+        source: 'OpenStreetMap',
+      },
+    });
+
+    const lead = await prisma.lead.create({
+      data: {
+        businessId: business.id,
+        status: item.leadStatus,
+        leadScore: item.leadScore,
+        opportunityScore: item.opportunityScore,
+        priority: item.priority,
+        estimatedValue: item.estimatedValue,
+        qualificationStatus: item.qualificationStatus,
+        hasProblem: item.hasProblem,
+        decisionMaker: item.decisionMaker,
+        budgetPotential: item.budgetPotential,
+        urgency: item.urgency,
+        techComplexity: item.techComplexity,
+        closeProbability: item.closeProbability,
+        notes: item.notes,
+        lastContactedAt: item.interactions.length ? new Date() : null,
+        nextFollowUpAt: item.followUp ? item.followUp.dueDate : null,
+      },
+    });
+
+    // Business Audit
+    await prisma.businessAudit.create({
+      data: {
+        leadId: lead.id,
+        websiteStatus: item.audit.websiteStatus,
+        isReachable: item.audit.isReachable,
+        isHttps: item.audit.isHttps,
+        mobileFriendly: item.audit.mobileFriendly,
+        hasContactInfo: item.audit.hasContactInfo,
+        hasPhoneVisible: item.audit.hasPhoneVisible,
+        hasWhatsApp: item.audit.hasWhatsApp,
+        hasEmail: item.audit.hasEmail,
+        hasContactForm: item.audit.hasContactForm,
+        hasBooking: item.audit.hasBooking,
+        hasOnlineOrdering: item.audit.hasOnlineOrdering,
+        hasEcommerce: item.audit.hasEcommerce,
+        hasPayment: item.audit.hasPayment,
+        seoSignalsScore: item.audit.seoSignalsScore,
+        overallScore: item.audit.overallScore,
+        summaryText: item.audit.summaryText,
+      },
+    });
+
+    // Opportunities
+    for (const opp of item.opportunities) {
+      await prisma.opportunity.create({
+        data: {
+          leadId: lead.id,
+          type: opp.type,
+          title: opp.title,
+          description: opp.description,
+          confidenceScore: opp.confidenceScore,
+          estimatedImpact: opp.estimatedImpact,
+        },
+      });
+    }
+
+    // Interactions
+    for (const inter of item.interactions) {
+      await prisma.interaction.create({
+        data: {
+          leadId: lead.id,
+          type: inter.type,
+          summary: inter.summary,
+          details: inter.details,
+          sentiment: inter.sentiment,
+        },
+      });
+    }
+
+    // Follow-up
+    if (item.followUp) {
+      await prisma.followUp.create({
+        data: {
+          leadId: lead.id,
+          dueDate: item.followUp.dueDate,
+          reason: item.followUp.reason,
+          notes: item.followUp.notes,
+          status: 'PENDING',
+        },
+      });
+    }
+
+    // If WON (The Grand HSR Hotel), create Client, Project, and Proposal records
+    if (item.leadStatus === 'WON') {
+      const client = await prisma.client.create({
+        data: {
+          leadId: lead.id,
+          businessId: business.id,
+          clientName: 'Grand HSR Hospitality Group',
+          businessName: business.name,
+          contactPerson: 'Aditya Sharma (General Manager)',
+          phone: business.phone,
+          email: business.email,
+          website: business.website,
+          industry: 'Hospitality',
+          location: business.address,
+          status: 'ACTIVE',
+          totalBilled: 4200,
+          notes: 'High-value hospitality client. Open to ongoing monthly retainer after launch.',
+        },
+      });
+
+      await prisma.project.create({
+        data: {
+          clientId: client.id,
+          projectName: 'Direct Booking Engine & Room QR Suite',
+          status: 'DEVELOPMENT',
+          projectValue: 4200,
+          startDate: new Date(),
+          deadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 21), // 3 weeks
+          scopeModules: JSON.stringify(['appointment_booking', 'business_website', 'payment_billing', 'online_ordering_menu']),
+          notes: 'Phase 1: Direct Room Booking Engine with Razorpay. Phase 2: In-room QR menu.',
+        },
+      });
+
+      await prisma.proposal.create({
+        data: {
+          leadId: lead.id,
+          clientId: client.id,
+          title: 'Direct Room Booking & Guest Experience Platform',
+          problemStatement: 'The Grand HSR currently pays ~18% in OTA commissions to Booking.com and MakeMyTrip, resulting in significant annual margin loss.',
+          proposedSolution: 'A custom, mobile-first direct booking engine with instant WhatsApp confirmation and in-room QR dining capabilities.',
+          scopeFeatures: JSON.stringify([
+            'Mobile-first responsive booking website',
+            'Real-time room availability & calendar selector',
+            'Razorpay & International Card payment checkout',
+            'Automated WhatsApp booking confirmations & PDF invoice generator',
+            'In-room QR code digital room service ordering',
+            'Receptionist Admin & Housekeeping dispatch dashboard',
+          ]),
+          timelineWeeks: 3,
+          price: 4200,
+          currency: 'USD',
+          paymentSchedule: JSON.stringify([
+            { milestone: 'Project Kickoff & UI Approval', percentage: 50, amount: 2100 },
+            { milestone: 'Development & Testing Signoff', percentage: 30, amount: 1260 },
+            { milestone: 'Live Deployment & Staff Training', percentage: 20, amount: 840 },
+          ]),
+          maintenanceTerms: '30 days of complimentary bug fixes and priority support post-launch. Optional ongoing maintenance at $350/month.',
+          termsConditions: 'All source code and intellectual property transfer to the client upon full payment completion.',
+          status: 'ACCEPTED',
+          sentAt: new Date(Date.now() - 1000 * 60 * 60 * 72),
+          acceptedAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+        },
+      });
+    }
+
+    // Sample Discovery for Dental Clinic
+    if (item.name.includes('Aura Dental')) {
+      await prisma.discovery.create({
+        data: {
+          leadId: lead.id,
+          businessSummary: 'Modern multi-specialty dental clinic in HSR Layout with 3 consulting dentists and 2 hygienists.',
+          employeesCount: 5,
+          locationsCount: 1,
+          monthlyCustomers: 260,
+          contactMethods: 'Phone calls, Walk-ins, Practo, WhatsApp',
+          leadSource: 'Google Maps and Word-of-Mouth',
+          usesExcel: true,
+          usesWhatsApp: true,
+          usesCrm: false,
+          usesBooking: false,
+          hasWebsite: true,
+          websiteManager: 'Freelance designer 3 years ago (no updates since)',
+          manualWorkBottlenecks: 'Front desk staff manually sends 20+ appointment reminder texts on personal WhatsApp daily.',
+          repetitiveDataEntry: 'Typing patient appointment logs into Excel spreadsheets every evening.',
+          enquiryLossPoints: 'Calls received during lunch hours or post 8:00 PM go unanswered with no self-booking option.',
+          customerComplaints: 'Long waiting room times when multiple walk-in patients overlap with scheduled procedures.',
+          leadsPerMonth: 80,
+          responseSpeed: '2 to 4 hours',
+          conversionRate: '45%',
+          billingMethod: 'UPI QR code at front desk and cash',
+          manualPaymentReminders: true,
+          automationWishes: 'Self-service online booking with slot limits and automated WhatsApp reminders 24 hours prior.',
+          synthesizedProblem: 'Front-desk operational bottleneck causing missed after-hours patient bookings and 15% procedure no-show rate.',
+          currentProcessSummary: 'Patients call clinic phone -> receptionist checks paper diary -> confirms slot -> manually texts reminder.',
+          bottlenecksSummary: 'Zero after-hours booking capability, manual reminder overhead, lack of centralized patient recall history.',
+          recommendedSolution: 'Automated Dental Appointment Booking System with direct 24/7 calendar integration and WhatsApp bot.',
+          mvpScope: 'Patient Web Booking Form + WhatsApp Automated Confirmations + Doctor Daily Agenda View',
+          phase2Scope: 'Digital Medical History Intake + 6-Month Teeth Cleaning Recall Bot',
+          expectedBenefits: 'Capture 20+ extra monthly bookings after-hours, reduce clinic no-shows by 40%, and save 2 hours of daily front-desk manual texting.',
+          recommendedModules: JSON.stringify(['appointment_booking', 'whatsapp_automation', 'lead_crm']),
+        },
+      });
+    }
+  }
+
+  console.log('Successfully seeded Fast Pace database!');
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

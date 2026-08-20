@@ -1,0 +1,330 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id            String         @id @default(cuid())
+  osmId         String?        @unique
+  name          String
+  category      String
+  subcategory   String?
+  address       String?
+  area          String?
+  city          String?
+  state         String?
+  country       String?
+  latitude      Float
+  longitude     Float
+  distanceKm    Float?
+  phone         String?
+  website       String?
+  email         String?
+  openingHours  String?
+  rating        Float?
+  reviewCount   Int?
+  mapsUrl       String?
+  source        String         @default("OpenStreetMap")
+  rawTags       String?        // JSON string of OSM tags
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  lead          Lead?
+  client        Client?
+
+  @@index([category])
+  @@index([latitude, longitude])
+  @@index([name])
+}
+
+model Lead {
+  id               String          @id @default(cuid())
+  businessId       String          @unique
+  business         Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  status           String          @default("NEW") // NEW, RESEARCHED, CONTACTED, WHATSAPP_SENT, CALLED, INTERESTED, DISCOVERY_SCHEDULED, DISCOVERY_COMPLETED, PROPOSAL_SENT, NEGOTIATING, WON, LOST, FOLLOW_UP, DO_NOT_CONTACT
+  leadScore        Int             @default(50)    // 0-100
+  opportunityScore Int             @default(50)    // 0-100
+  priority         String          @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  estimatedValue   Float?          @default(1500)
+  
+  // Qualification fields
+  qualificationStatus String?      // QUALIFIED, NURTURE, LOW_PRIORITY
+  hasProblem       String?         // YES, NO, UNKNOWN
+  decisionMaker    String?         // YES, NO, UNKNOWN
+  budgetPotential  String?         // LOW, MEDIUM, HIGH, UNKNOWN
+  urgency          String?         // LOW, MEDIUM, HIGH
+  techComplexity   String?         // LOW, MEDIUM, HIGH
+  closeProbability String?         // LOW, MEDIUM, HIGH
+
+  // Ice mode extension fields
+  iceRequirementKg Float?
+  iceType          String?         // TUBE, BLOCK, CRUSHED, GOURMET
+  currentSupplier  String?
+  pricePerKg       Float?
+  deliveryFreq     String?
+  iceNotes         String?
+
+  notes            String?
+  lastContactedAt  DateTime?
+  nextFollowUpAt   DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  audit            BusinessAudit?
+  opportunities    Opportunity[]
+  interactions     Interaction[]
+  followUps        FollowUp[]
+  discoveries      Discovery[]
+  proposals        Proposal[]
+  client           Client?
+
+  @@index([status])
+  @@index([opportunityScore])
+  @@index([leadScore])
+}
+
+model BusinessAudit {
+  id               String    @id @default(cuid())
+  leadId           String    @unique
+  lead             Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  websiteStatus    String    @default("UNABLE_TO_ASSESS") // STRONG, AVERAGE, NEEDS_IMPROVEMENT, NO_WEBSITE, UNABLE_TO_ASSESS
+  isReachable      Boolean   @default(false)
+  isHttps          Boolean   @default(false)
+  mobileFriendly   Boolean   @default(false)
+  hasContactInfo   Boolean   @default(false)
+  hasPhoneVisible  Boolean   @default(false)
+  hasWhatsApp      Boolean   @default(false)
+  hasEmail         Boolean   @default(false)
+  hasContactForm   Boolean   @default(false)
+  hasBooking       Boolean   @default(false)
+  hasOnlineOrdering Boolean  @default(false)
+  hasEcommerce     Boolean   @default(false)
+  hasPayment       Boolean   @default(false)
+  socialLinks      String?   // JSON array of URLs
+  pageTitle        String?
+  metaDescription  String?
+  seoSignalsScore  Int?      @default(0)
+  overallScore     Int       @default(50)
+  summaryText      String?
+  lastAuditedAt    DateTime  @default(now())
+}
+
+model Opportunity {
+  id               String    @id @default(cuid())
+  leadId           String
+  lead             Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  type             String    // WEBSITE, REDESIGN, AUTOMATION, BOOKING, CRM, WHATSAPP, ECOMMERCE, INTERNAL_SOFTWARE, DASHBOARD, PAYMENT, MARKETING
+  title            String
+  description      String
+  confidenceScore  Int       @default(80) // 0-100
+  estimatedImpact  String?   // HIGH, MEDIUM, LOW
+  tags             String?   // JSON array
+  createdAt        DateTime  @default(now())
+
+  @@index([leadId])
+  @@index([type])
+}
+
+model Interaction {
+  id               String    @id @default(cuid())
+  leadId           String
+  lead             Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  type             String    // CREATED, CALLED, WHATSAPP_SENT, EMAIL_SENT, MEETING, FOLLOW_UP, PROPOSAL, WON, LOST, NOTE
+  summary          String
+  details          String?
+  sentiment        String?   // POSITIVE, NEUTRAL, NEGATIVE
+  conductedAt      DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+
+  @@index([leadId])
+}
+
+model FollowUp {
+  id               String    @id @default(cuid())
+  leadId           String
+  lead             Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  dueDate          DateTime
+  reason           String
+  notes            String?
+  status           String    @default("PENDING") // PENDING, COMPLETED, CANCELLED
+  completedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([leadId])
+  @@index([dueDate, status])
+}
+
+model Discovery {
+  id                String    @id @default(cuid())
+  leadId            String
+  lead              Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  businessSummary   String?
+  employeesCount    Int?
+  locationsCount    Int?      @default(1)
+  monthlyCustomers  Int?
+  contactMethods    String?   // Phone, Walk-in, Website, Instagram, etc.
+  leadSource        String?
+  
+  currentSoftware   String?   // JSON array / notes
+  usesExcel         Boolean   @default(false)
+  usesWhatsApp      Boolean   @default(false)
+  usesCrm           Boolean   @default(false)
+  usesBooking       Boolean   @default(false)
+  hasWebsite        Boolean   @default(false)
+  websiteManager    String?
+  
+  manualWorkBottlenecks String?
+  repetitiveDataEntry   String?
+  enquiryLossPoints     String?
+  delayCauses           String?
+  mistakeCauses         String?
+  customerComplaints    String?
+  desiredReports        String?
+
+  leadsPerMonth     Int?
+  responseSpeed     String?
+  conversionRate    String?
+  followUpTracking  String?
+  repeatHandling    String?
+  
+  billingMethod     String?
+  paymentTracking   String?
+  manualPaymentReminders Boolean @default(false)
+  
+  automationWishes  String?
+  onlineWishes      String?
+  timeSavingPriority String?
+  magicWandElimination String?
+
+  // Synthesized analysis
+  synthesizedProblem    String?
+  currentProcessSummary String?
+  bottlenecksSummary    String?
+  recommendedSolution   String?
+  mvpScope              String?
+  phase2Scope           String?
+  expectedBenefits      String?
+  recommendedModules    String? // JSON array of module names
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([leadId])
+}
+
+model Client {
+  id               String    @id @default(cuid())
+  leadId           String?   @unique
+  lead             Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  businessId       String?   @unique
+  business         Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  clientName       String
+  businessName     String
+  contactPerson    String?
+  phone            String?
+  email            String?
+  website          String?
+  industry         String
+  location         String?
+  status           String    @default("ACTIVE") // ACTIVE, ON_HOLD, COMPLETED, ARCHIVED
+  totalBilled      Float     @default(0)
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  projects         Project[]
+  proposals        Proposal[]
+}
+
+model Project {
+  id               String    @id @default(cuid())
+  clientId         String
+  client           Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  projectName      String
+  status           String    @default("DISCOVERY") // DISCOVERY, PLANNING, DESIGN, DEVELOPMENT, TESTING, DEPLOYMENT, MAINTENANCE, COMPLETED
+  projectValue     Float     @default(0)
+  startDate        DateTime?
+  deadline         DateTime?
+  scopeModules     String?   // JSON array of feature modules
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+}
+
+model Proposal {
+  id               String    @id @default(cuid())
+  leadId           String?
+  lead             Lead?     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  clientId         String?
+  client           Client?   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  title            String
+  problemStatement String
+  proposedSolution String
+  scopeFeatures    String    // JSON array of features / deliverables
+  timelineWeeks    Int       @default(3)
+  price            Float
+  currency         String    @default("USD")
+  paymentSchedule  String    // JSON structure of milestones & percentages
+  maintenanceTerms String?
+  termsConditions  String?
+  status           String    @default("DRAFT") // DRAFT, SENT, ACCEPTED, REJECTED
+  sentAt           DateTime?
+  acceptedAt       DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status])
+}
+
+model Search {
+  id               String    @id @default(cuid())
+  address          String
+  latitude         Float
+  longitude        Float
+  radiusKm         Float
+  categories       String    // JSON array
+  resultsCount     Int       @default(0)
+  createdAt        DateTime  @default(now())
+}
+
+model SearchPreset {
+  id               String    @id @default(cuid())
+  name             String    @unique
+  description      String?
+  categories       String    // JSON array of category names
+  isBuiltIn        Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+}
+
+model Category {
+  id               String    @id @default(cuid())
+  name             String    @unique
+  group            String    // Food, Health, Hospitality, etc.
+  osmTags          String    // JSON array of tag key/value pairs
+  defaultScore     Int       @default(70)
+  icon             String?
+  createdAt        DateTime  @default(now())
+}
+
+model Setting {
+  id               String    @id @default(cuid())
+  key              String    @unique
+  value            String    // JSON value or string
+  updatedAt        DateTime  @updatedAt
+}
