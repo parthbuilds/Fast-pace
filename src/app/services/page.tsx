@@ -181,7 +181,7 @@ export default function ServicesPage() {
   const totalCost = useMemo(() => {
     return selectedIds.reduce((sum, id) => {
       const mod = SOFTWARE_MODULES.find((m) => m.id === id);
-      const price = customPrices[id] !== undefined ? customPrices[id] : (mod?.basePriceUSD || 0);
+      const price = customPrices[id] !== undefined ? customPrices[id] : (mod?.basePrice || 0);
       return sum + price;
     }, 0);
   }, [selectedIds, customPrices]);
@@ -195,11 +195,11 @@ export default function ServicesPage() {
 
   const monthlyRetainer = useMemo(() => {
     if (selectedIds.length === 0) return 0;
-    // Heuristic base retainer calculation
-    if (totalCost < 1500) return 150;
-    if (totalCost < 3000) return 299;
-    if (totalCost < 6000) return 499;
-    return 799;
+    // Heuristic base retainer calculation in INR
+    if (totalCost < 50000) return 4000;
+    if (totalCost < 120000) return 8000;
+    if (totalCost < 250000) return 12000;
+    return 20000;
   }, [totalCost, selectedIds]);
 
   // Sum client third-party monthly recurring cost
@@ -236,19 +236,19 @@ export default function ServicesPage() {
     const selectedModules = SOFTWARE_MODULES.filter((m) => selectedIds.includes(m.id));
     let draft = `### Freelance Software Solution Proposal\n\n`;
     draft += `**Estimated Project Timeline:** ${totalWeeks} Weeks\n`;
-    draft += `**Total Build Investment:** ${formatCurrency(totalCost)} USD\n`;
-    draft += `**Estimated Client Running Cost:** ${formatCurrency(totalClientMonthlyCost)} USD/month (paid directly to SaaS/API providers)\n`;
-    draft += `**Monthly Support & Maintenance Retainer:** ${formatCurrency(monthlyRetainer)} USD/month\n\n`;
+    draft += `**Total Build Investment:** ${formatCurrency(totalCost)} INR\n`;
+    draft += `**Estimated Client Running Cost:** ${formatCurrency(totalClientMonthlyCost)} INR/month (paid directly to SaaS/API providers)\n`;
+    draft += `**Monthly Support & Maintenance Retainer:** ${formatCurrency(monthlyRetainer)} INR/month\n\n`;
     draft += `---\n\n`;
     draft += `#### Scope of Deliverables & Technologies\n\n`;
 
     selectedModules.forEach((m, idx) => {
       const details = MODULE_DETAILS_MAP[m.id];
-      const price = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePriceUSD;
+      const price = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePrice;
       draft += `${idx + 1}. **${m.name}** (${formatCurrency(price)} | ${m.estimatedWeeks} Weeks)\n`;
       draft += `   *Description:* ${m.description}\n`;
       draft += `   *Core Technologies:* ${m.techStack.join(', ')}\n`;
-      draft += `   *Third-Party Running Cost:* ${formatCurrency(m.clientMonthlyCost)} USD/month\n`;
+      draft += `   *Third-Party Running Cost:* ${formatCurrency(m.clientMonthlyCost)} INR/month\n`;
       if (details) {
         draft += `   *What You Receive:*\n`;
         details.deliverables.forEach((d) => {
@@ -260,9 +260,9 @@ export default function ServicesPage() {
     });
 
     draft += `#### Payment Schedule Milestones\n`;
-    draft += `- **50% Upfront Kickoff Deposit:** ${formatCurrency(totalCost * 0.5)} USD\n`;
-    draft += `- **30% User Acceptance Testing (UAT) Release:** ${formatCurrency(totalCost * 0.3)} USD\n`;
-    draft += `- **20% Production Deployment & Launch:** ${formatCurrency(totalCost * 0.2)} USD\n\n`;
+    draft += `- **50% Upfront Kickoff Deposit:** ${formatCurrency(totalCost * 0.5)} INR\n`;
+    draft += `- **30% User Acceptance Testing (UAT) Release:** ${formatCurrency(totalCost * 0.3)} INR\n`;
+    draft += `- **20% Production Deployment & Launch:** ${formatCurrency(totalCost * 0.2)} INR\n\n`;
     draft += `*Note: Hosting fees, custom API credits, and third-party subscription charges are client responsibilities. Net-15 invoicing rules apply.*`;
     return draft;
   }, [selectedIds, totalCost, totalWeeks, monthlyRetainer, customPrices, totalClientMonthlyCost]);
@@ -319,7 +319,7 @@ export default function ServicesPage() {
             {filteredModules.map((module) => {
               const isSelected = selectedIds.includes(module.id);
               const details = MODULE_DETAILS_MAP[module.id];
-              const displayPrice = customPrices[module.id] !== undefined ? customPrices[module.id] : module.basePriceUSD;
+              const displayPrice = customPrices[module.id] !== undefined ? customPrices[module.id] : module.basePrice;
               return (
                 <div
                   key={module.id}
@@ -530,7 +530,7 @@ export default function ServicesPage() {
               ) : (
                 <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
                   {SOFTWARE_MODULES.filter((m) => selectedIds.includes(m.id)).map((m) => {
-                    const currentPrice = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePriceUSD;
+                    const currentPrice = customPrices[m.id] !== undefined ? customPrices[m.id] : m.basePrice;
                     return (
                       <div
                         key={m.id}
@@ -543,7 +543,7 @@ export default function ServicesPage() {
                         <div className="flex justify-between items-center">
                           <span className="text-[10px] text-slate-400 block truncate">Tech: {m.techStack.slice(0, 2).join(', ')}</span>
                           <div className="flex items-center gap-1">
-                            <span className="text-[10px] text-slate-500 font-bold">$</span>
+                            <span className="text-[10px] text-slate-500 font-bold">₹</span>
                             <input
                               type="number"
                               value={currentPrice}

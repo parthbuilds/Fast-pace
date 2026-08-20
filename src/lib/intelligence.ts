@@ -4,7 +4,7 @@ export interface SoftwareModule {
   category: 'web' | 'automation' | 'crm' | 'operations' | 'ai';
   description: string;
   estimatedWeeks: number;
-  basePriceUSD: number;
+  basePrice: number;
   highlightTag: string;
   techStack: string[];
   clientMonthlyCost: number;
@@ -18,10 +18,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'web',
     description: 'High-converting responsive website with modern typography, SEO optimization, and mobile-first speed.',
     estimatedWeeks: 2,
-    basePriceUSD: 1200,
+    basePrice: 45000,
     highlightTag: 'Web Presence',
     techStack: ['Next.js', 'Vercel', 'Tailwind CSS', 'Framer Motion'],
-    clientMonthlyCost: 15,
+    clientMonthlyCost: 1250,
     devSelfCost: 0,
   },
   {
@@ -30,10 +30,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'web',
     description: 'Modernizing outdated visual design, fixing mobile responsiveness, and elevating brand authority.',
     estimatedWeeks: 2,
-    basePriceUSD: 1000,
+    basePrice: 35000,
     highlightTag: 'Modernization',
     techStack: ['Next.js', 'Lighthouse Optimization', 'Vercel'],
-    clientMonthlyCost: 15,
+    clientMonthlyCost: 1250,
     devSelfCost: 0,
   },
   {
@@ -42,10 +42,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'automation',
     description: 'Self-service calendar booking with real-time slot availability, intake questionnaires, and deposit handling.',
     estimatedWeeks: 2,
-    basePriceUSD: 1500,
+    basePrice: 55000,
     highlightTag: 'Booking',
     techStack: ['Cal.com API', 'Supabase Database', 'Stripe Payments'],
-    clientMonthlyCost: 29,
+    clientMonthlyCost: 2400,
     devSelfCost: 0,
   },
   {
@@ -54,11 +54,11 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'automation',
     description: 'Instant lead capture from website, automated booking reminders, review requests, and catalog sharing via WhatsApp.',
     estimatedWeeks: 1,
-    basePriceUSD: 800,
+    basePrice: 35000,
     highlightTag: 'WhatsApp',
     techStack: ['Meta Cloud API', 'Make.com Workflow', 'NodeJS Hooks'],
-    clientMonthlyCost: 45,
-    devSelfCost: 9,
+    clientMonthlyCost: 3750,
+    devSelfCost: 750,
   },
   {
     id: 'lead_crm',
@@ -66,10 +66,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'crm',
     description: 'Centralized lead pipeline to stop lead leakage, track follow-up schedules, and record interaction history.',
     estimatedWeeks: 3,
-    basePriceUSD: 2200,
+    basePrice: 85000,
     highlightTag: 'Sales OS',
     techStack: ['NextJS Dashboard', 'Supabase Postgres', 'Prisma ORM'],
-    clientMonthlyCost: 25,
+    clientMonthlyCost: 2000,
     devSelfCost: 0,
   },
   {
@@ -78,10 +78,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'web',
     description: 'Zero-commission direct ordering system with item modifiers, table QR ordering, and WhatsApp order alerts.',
     estimatedWeeks: 3,
-    basePriceUSD: 1800,
+    basePrice: 65000,
     highlightTag: 'Direct Sales',
     techStack: ['Next.js PWA', 'Supabase Database', 'Stripe checkout'],
-    clientMonthlyCost: 35,
+    clientMonthlyCost: 2900,
     devSelfCost: 0,
   },
   {
@@ -90,10 +90,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'operations',
     description: 'Digital points tracker, tier benefits, renewal reminders, and VIP offer triggers to maximize lifetime value.',
     estimatedWeeks: 2,
-    basePriceUSD: 1400,
+    basePrice: 45000,
     highlightTag: 'Retention',
     techStack: ['Supabase DB', 'Clerk Auth', 'WhatsApp templates'],
-    clientMonthlyCost: 20,
+    clientMonthlyCost: 1650,
     devSelfCost: 0,
   },
   {
@@ -102,10 +102,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'operations',
     description: 'Stripe/UPI integration with instant receipts, payment link generation, and automated overdue nudges.',
     estimatedWeeks: 1,
-    basePriceUSD: 900,
+    basePrice: 30000,
     highlightTag: 'Payments',
     techStack: ['Stripe API', 'Razorpay Checkout', 'Make.com Hooks'],
-    clientMonthlyCost: 15,
+    clientMonthlyCost: 1250,
     devSelfCost: 0,
   },
   {
@@ -114,10 +114,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'operations',
     description: 'Live charts tracking daily sales, lead sources, peak enquiry hours, staff capacity, and revenue trends.',
     estimatedWeeks: 2,
-    basePriceUSD: 1600,
+    basePrice: 55000,
     highlightTag: 'Intelligence',
     techStack: ['Tremor Charts', 'NextJS App', 'Tinybird Analytics'],
-    clientMonthlyCost: 20,
+    clientMonthlyCost: 1650,
     devSelfCost: 0,
   },
   {
@@ -126,11 +126,11 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'ai',
     description: 'Trained AI assistant answering FAQs, checking service pricing, qualifying prospects, and collecting contact details.',
     estimatedWeeks: 2,
-    basePriceUSD: 1400,
+    basePrice: 50000,
     highlightTag: 'AI Automation',
     techStack: ['OpenAI Assistants API', 'Pinecone Vector DB', 'NextJS'],
-    clientMonthlyCost: 30,
-    devSelfCost: 5,
+    clientMonthlyCost: 2500,
+    devSelfCost: 400,
   },
   {
     id: 'internal_portal',
@@ -138,10 +138,10 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'operations',
     description: 'Role-based portal for staff shift scheduling, task assignment, inventory alerts, and daily checklists.',
     estimatedWeeks: 4,
-    basePriceUSD: 2800,
+    basePrice: 95000,
     highlightTag: 'Internal Tool',
     techStack: ['NextJS Server Actions', 'Clerk Team auth', 'Supabase'],
-    clientMonthlyCost: 35,
+    clientMonthlyCost: 2900,
     devSelfCost: 0,
   },
   {
@@ -150,11 +150,11 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     category: 'ai',
     description: 'Conversational AI receptionist that answers calls instantly, answers business FAQs, qualifies callers, schedules bookings, and sends alerts.',
     estimatedWeeks: 2,
-    basePriceUSD: 1800,
+    basePrice: 90000,
     highlightTag: 'AI Voice',
     techStack: ['Vapi.ai SDK', 'Bland.ai API', 'Twilio Webhooks', 'Cal.com'],
-    clientMonthlyCost: 80,
-    devSelfCost: 10,
+    clientMonthlyCost: 6500,
+    devSelfCost: 800,
   },
 ];
 
