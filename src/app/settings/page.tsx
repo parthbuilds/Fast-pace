@@ -85,7 +85,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-16">
+    <div className="space-y-6 mx-auto pb-16">
       {/* Top Banner */}
       <div>
         <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
@@ -117,11 +117,10 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={() => setTheme('light')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors ${
-                  theme === 'light'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors ${theme === 'light'
                     ? 'bg-white text-blue-600 shadow-sm'
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                }`}
+                  }`}
               >
                 <Sun className="w-3.5 h-3.5" />
                 <span>Light</span>
@@ -129,11 +128,10 @@ export default function SettingsPage() {
               <button
                 type="button"
                 onClick={() => setTheme('dark')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors ${
-                  theme === 'dark'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors ${theme === 'dark'
                     ? 'bg-slate-800 text-blue-400 shadow-sm'
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                }`}
+                  }`}
               >
                 <Moon className="w-3.5 h-3.5" />
                 <span>Dark</span>

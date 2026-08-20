@@ -161,6 +161,26 @@ const MODULE_DETAILS_MAP: Record<
     roi: 'Organize team tasks, reduce paperwork errors, and coordinate staff operations in one clear portal.',
     industries: ['Hospitality', 'Health', 'Food', 'Professional Services'],
   },
+  broker_crm: {
+    deliverables: [
+      'Broker shift scheduling & availability routing engine',
+      'Twilio instant SMS alerts to assigned brokers',
+      'Client status history & pipeline logs',
+      'Performance dashboards for broker agency owners',
+    ],
+    roi: 'Increase response speed to property leads from hours to under 3 minutes. Capture massive profit by preventing lead leakage, driving a 35%+ increase in closed sales commissions.',
+    industries: ['Real Estate', 'Professional Services', 'Brokers', 'Agencies'],
+  },
+  property_portal: {
+    deliverables: [
+      'Responsive listing search catalog with price, bed, and area filter tags',
+      'Interactive Mapbox maps view with custom location pins',
+      'Self-hosted high-definition video walkthrough tour players',
+      'Direct broker contact forms & schedule coordinator hooks',
+    ],
+    roi: 'Establish independent digital brand authority. Capture qualified property buyers directly on your own platform, reducing manual tour coordination overhead by 40% and showcasing high-ticket listings 24/7.',
+    industries: ['Real Estate', 'Brokers', 'Property Developers'],
+  },
 };
 
 export default function ServicesPage() {
@@ -446,35 +466,35 @@ export default function ServicesPage() {
 
         {/* Right Side: Interactive Proposal Calculator (1 Column Span) */}
         <div className="space-y-6">
-          <div className="bg-slate-900 text-white rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6 sticky top-24">
+          <div className="bg-white dark:bg-[#111827] text-slate-900 dark:text-white rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xl space-y-6 sticky top-24">
             <div>
-              <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 uppercase tracking-widest">
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 uppercase tracking-widest">
                 Proposal Estimator
               </span>
-              <h2 className="text-base font-bold text-white tracking-tight mt-1.5 flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-indigo-400" />
+              <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight mt-1.5 flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Freelance Package Calculator</span>
               </h2>
-              <p className="text-[11px] text-slate-400 mt-1">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                 Configure selected services to calculate milestones, timing budgets, and retainers.
               </p>
             </div>
 
             {/* Calculations metrics */}
-            <div className="grid grid-cols-2 gap-4 border-t border-b border-slate-800 py-4">
+            <div className="grid grid-cols-2 gap-4 border-t border-b border-slate-200 dark:border-slate-800 py-4">
               <div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Total Project Cost
                 </span>
-                <span className="text-lg font-extrabold text-white tracking-tight block">
+                <span className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight block">
                   {formatCurrency(totalCost)}
                 </span>
               </div>
               <div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+                <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Estimated Timeline
                 </span>
-                <span className="text-lg font-extrabold text-indigo-400 tracking-tight block">
+                <span className="text-lg font-extrabold text-indigo-600 dark:text-indigo-400 tracking-tight block">
                   {totalWeeks} {totalWeeks === 1 ? 'Week' : 'Weeks'}
                 </span>
               </div>
@@ -482,22 +502,22 @@ export default function ServicesPage() {
 
             {/* Recurring cost details */}
             {selectedIds.length > 0 && (
-              <div className="bg-slate-800/25 border border-slate-850 rounded-xl p-3 space-y-2">
+              <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-xl p-3 space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-400 flex items-center gap-1.5">
-                    <Coins className="w-3.5 h-3.5 text-indigo-400" />
+                  <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                    <Coins className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                     <span>Client Recurring:</span>
                   </span>
-                  <span className="font-bold text-white">{formatCurrency(totalClientMonthlyCost)}/month</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(totalClientMonthlyCost)}/month</span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-400 flex-shrink-0 flex items-center gap-1.5">
+                  <span className="text-slate-650 dark:text-slate-400 flex-shrink-0 flex items-center gap-1.5">
                     <Cpu className="w-3.5 h-3.5 text-slate-500" />
                     <span>Developer Self-Cost:</span>
                   </span>
-                  <span className="font-bold text-slate-300">{formatCurrency(totalDevSelfCost)}/month</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-350">{formatCurrency(totalDevSelfCost)}/month</span>
                 </div>
-                <div className="pt-1.5 border-t border-slate-800/80 flex items-center gap-1 text-[10px] text-indigo-400 italic">
+                <div className="pt-1.5 border-t border-slate-200 dark:border-slate-800/80 flex items-center gap-1 text-[10px] text-indigo-600 dark:text-indigo-400 italic">
                   <AlertCircle className="w-3 h-3 flex-shrink-0" />
                   <span>SaaS subscriptions are billed directly to client.</span>
                 </div>
@@ -505,24 +525,24 @@ export default function ServicesPage() {
             )}
 
             {/* Monthly Retainer */}
-            <div className="bg-slate-800/40 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+            <div className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider block">
                   Support Retainer
                 </span>
-                <span className="text-xs text-slate-400">Updates, backup, bug-fixing</span>
+                <span className="text-xs text-slate-550 dark:text-slate-400">Updates, backup, bug-fixing</span>
               </div>
               <div className="text-right">
-                <span className="text-sm font-bold text-white block">
+                <span className="text-sm font-bold text-slate-900 dark:text-white block">
                   {formatCurrency(monthlyRetainer)}
                 </span>
-                <span className="text-[10px] text-slate-400">/ month</span>
+                <span className="text-[10px] text-slate-550 dark:text-slate-400">/ month</span>
               </div>
             </div>
 
             {/* Selected Modules Summary & Customizable Inputs */}
             <div className="space-y-3">
-              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Custom Modules & Pricing ({selectedIds.length})
               </h3>
               {selectedIds.length === 0 ? (
@@ -534,14 +554,14 @@ export default function ServicesPage() {
                     return (
                       <div
                         key={m.id}
-                        className="flex flex-col gap-1.5 text-xs text-slate-300 bg-slate-800/60 p-2.5 rounded-lg border border-slate-800/50"
+                        className="flex flex-col gap-1.5 text-xs text-slate-800 dark:text-slate-350 bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-850/80"
                       >
                         <div className="flex justify-between items-center">
-                          <span className="font-semibold text-white truncate pr-2">{m.name}</span>
-                          <span className="text-[10px] text-slate-400 flex-shrink-0">{m.estimatedWeeks} wks</span>
+                          <span className="font-semibold text-slate-900 dark:text-white truncate pr-2">{m.name}</span>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 flex-shrink-0">{m.estimatedWeeks} wks</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-[10px] text-slate-400 block truncate">Tech: {m.techStack.slice(0, 2).join(', ')}</span>
+                          <span className="text-[10px] text-slate-550 dark:text-slate-450 block truncate">Tech: {m.techStack.slice(0, 2).join(', ')}</span>
                           <div className="flex items-center gap-1">
                             <span className="text-[10px] text-slate-500 font-bold">₹</span>
                             <input
@@ -549,7 +569,7 @@ export default function ServicesPage() {
                               value={currentPrice}
                               onChange={(e) => handlePriceChange(m.id, Number(e.target.value))}
                               onClick={(e) => e.stopPropagation()} // Prevent card toggle if clicked
-                              className="w-16 bg-slate-900 border border-slate-700/80 rounded px-1 py-0.5 text-right text-white text-xs font-bold focus:outline-none focus:border-indigo-500"
+                              className="w-16 bg-white dark:bg-slate-950 border border-slate-350 dark:border-slate-800 rounded px-1.5 py-0.5 text-right text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:border-indigo-500"
                             />
                           </div>
                         </div>
@@ -562,22 +582,22 @@ export default function ServicesPage() {
 
             {/* Milestones Payment breakdown */}
             {selectedIds.length > 0 && (
-              <div className="space-y-2.5 pt-2 border-t border-slate-800">
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Standard Payment Schedule
                 </h4>
-                <div className="space-y-1.5 text-xs text-slate-300">
+                <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
                   <div className="flex justify-between">
                     <span>50% Upfront Kickoff:</span>
-                    <span className="font-semibold text-white">{formatCurrency(totalCost * 0.5)}</span>
+                    <span className="font-semibold text-slate-900 dark:text-white">{formatCurrency(totalCost * 0.5)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>30% Release (UAT):</span>
-                    <span className="font-semibold text-white">{formatCurrency(totalCost * 0.3)}</span>
+                    <span className="font-semibold text-slate-900 dark:text-white">{formatCurrency(totalCost * 0.3)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>20% Live Deployment:</span>
-                    <span className="font-semibold text-white">{formatCurrency(totalCost * 0.2)}</span>
+                    <span className="font-semibold text-slate-900 dark:text-white">{formatCurrency(totalCost * 0.2)}</span>
                   </div>
                 </div>
               </div>
@@ -589,7 +609,7 @@ export default function ServicesPage() {
               disabled={selectedIds.length === 0}
               className={`w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                 selectedIds.length === 0
-                  ? 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-800/50'
+                  ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-slate-200 dark:border-slate-800/50'
                   : 'bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-500/20 active:scale-95'
               }`}
             >
