@@ -180,6 +180,18 @@ export const SOFTWARE_MODULES: SoftwareModule[] = [
     clientMonthlyCost: 2000,
     devSelfCost: 0,
   },
+  {
+    id: 'shopify_store',
+    name: 'Custom Shopify D2C Store Setup',
+    category: 'web',
+    description: 'Full-featured direct-to-consumer store setup on Shopify OS 2.0 with Razorpay payments, Shiprocket courier automation, and product SEO.',
+    estimatedWeeks: 2,
+    basePrice: 55000,
+    highlightTag: 'Shopify D2C',
+    techStack: ['Shopify Liquid / OS 2.0', 'Razorpay Payments', 'Shiprocket API', 'WhatsApp Notifications'],
+    clientMonthlyCost: 1999, // Shopify Basic Plan in INR
+    devSelfCost: 0, // Free Shopify Partner Development Stores
+  },
 ];
 
 export interface IndustryOpportunityRule {
@@ -475,6 +487,35 @@ export const INDUSTRY_OPPORTUNITY_RULES: Record<string, IndustryOpportunityRule>
       },
     ],
   },
+  Retail: {
+    industryKeywords: ['clothing', 'boutique', 'shoes', 'jewelry', 'electronics', 'furniture', 'gift', 'grocery', 'supermarket', 'retail', 'store', 'shop', 'brand'],
+    opportunities: [
+      {
+        type: 'SHOPIFY_STORE',
+        title: 'Custom Shopify D2C Store & Online Catalog',
+        description: 'Launch a high-converting direct-to-consumer online store with Shopify OS 2.0, automated inventory sync, and domestic shipping integration.',
+        confidence: 95,
+        impact: 'HIGH',
+        applicableModules: ['shopify_store', 'payment_billing'],
+      },
+      {
+        type: 'WHATSAPP_COMMERCE',
+        title: 'WhatsApp Abandoned Cart & Catalog Checkout',
+        description: 'Sync product catalog to WhatsApp, send instant checkout links, and recover 18-25% of abandoned carts automatically.',
+        confidence: 90,
+        impact: 'HIGH',
+        applicableModules: ['whatsapp_automation', 'customer_loyalty'],
+      },
+      {
+        type: 'INVENTORY_PORTAL',
+        title: 'Multi-Channel Stock & Order Dispatch Portal',
+        description: 'Sync offline counter sales with online orders to prevent stockouts and automate courier tracking updates.',
+        confidence: 85,
+        impact: 'MEDIUM',
+        applicableModules: ['internal_portal', 'analytics_dashboard'],
+      },
+    ],
+  },
 };
 
 export function detectOpportunitiesForBusiness(
@@ -582,7 +623,111 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
   const t = (title || '').toLowerCase();
   const typeStr = (type || '').toUpperCase();
 
-  // 1. Boutique Brand Website & Digital Menu
+  // 1. WhatsApp Reminders, Follow-Ups & Automation (Fixes screenshot issue)
+  if (
+    t.includes('whatsapp reminder') ||
+    t.includes('24h whatsapp') ||
+    t.includes('automated whatsapp') ||
+    t.includes('reminder') ||
+    t.includes('table reservation bot') ||
+    t.includes('whatsapp chat') ||
+    (t.includes('whatsapp') && !t.includes('cart')) ||
+    typeStr === 'WHATSAPP' ||
+    typeStr === 'WHATSAPP_AUTOMATION' ||
+    typeStr === 'WHATSAPP_WORKFLOW'
+  ) {
+    return {
+      techStack: ['Meta WhatsApp Cloud API', 'NodeJS Webhook Router', 'Supabase Database', 'Google Calendar Sync'],
+      freeAlternatives: [
+        'Meta Cloud API (First 1,000 service conversations FREE every month)',
+        'Supabase Free Tier (500MB PostgreSQL - $0)',
+        'Vercel Serverless Functions ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 35000,
+      estimatedProfit: 35000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1250,
+      clientProfitROI: 'Cuts appointment no-shows by 40% and saves front-desk staff 2+ hours daily of manual telephone confirmations. Surges Google 5-star reviews by 50% via automated post-visit review nudges.',
+      deliverables: [
+        'Official Meta WhatsApp Business Cloud API setup',
+        'Automated 24h & 2h pre-appointment confirmation pass with 1-click Reschedule button',
+        'Post-consultation / post-service automated review request trigger',
+        'Staff WhatsApp inbox & attendance tracker dashboard',
+      ],
+      implementationTimeline: '1 – 1.5 Weeks',
+    };
+  }
+
+  // 2. Patient Treatment, Clinical EHR & Healthcare Tracker (Fixes screenshot issue)
+  if (
+    t.includes('patient treatment') ||
+    t.includes('treatment tracker') ||
+    t.includes('patient') ||
+    t.includes('clinic') ||
+    t.includes('dentist') ||
+    t.includes('lab report') ||
+    typeStr === 'PATIENT_CRM' ||
+    typeStr === 'PATIENT_PORTAL'
+  ) {
+    return {
+      techStack: ['Next.js 16 EHR Dashboard', 'Supabase Encrypted DB', 'Prisma ORM', 'WhatsApp Health Alerts'],
+      freeAlternatives: [
+        'Supabase Free Tier (Encrypted PostgreSQL - $0)',
+        'Vercel Hobby Hosting ($0)',
+        'Open-Source Tailwind UI Clinical Kit ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 65000,
+      estimatedProfit: 65000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1850,
+      clientProfitROI: 'Prevents patient churn, automates 6-month checkup recalls, and boosts repeat consultation revenue by 30% without staff manual follow-up logs.',
+      deliverables: [
+        'Secure patient treatment history & visit logger',
+        'Automated 3-month & 6-month recurring checkup recall triggers',
+        'Digital prescription and diagnostic report download portal',
+        'Doctor appointment schedule & clinic revenue analytics dashboard',
+      ],
+      implementationTimeline: '2 – 3 Weeks',
+    };
+  }
+
+  // 3. Shopify D2C Store & E-Commerce Retail
+  if (
+    t.includes('shopify') ||
+    t.includes('store') ||
+    t.includes('ecommerce') ||
+    t.includes('d2c') ||
+    t.includes('online shop') ||
+    t.includes('catalog checkout') ||
+    typeStr === 'SHOPIFY_STORE' ||
+    typeStr === 'ECOMMERCE'
+  ) {
+    return {
+      techStack: ['Shopify Liquid / OS 2.0', 'Razorpay Payments (UPI/Card)', 'Shiprocket Courier API', 'WhatsApp Cart Recovery'],
+      freeAlternatives: [
+        'Shopify Partner Account (Unlimited Free Dev Stores - $0 Dev Cost)',
+        'Free Shopify Dawn Theme OS 2.0 ($0)',
+        'Razorpay Free Setup ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 55000,
+      estimatedProfit: 55000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1999, // Shopify Basic Plan
+      clientProfitROI: 'Expands local walk-in shop to pan-India / global direct-to-consumer sales. Automates doorstep courier pickups via Shiprocket and recovers 15-20% abandoned carts via WhatsApp automation.',
+      deliverables: [
+        'Shopify OS 2.0 store setup with conversion-optimized product pages',
+        'Razorpay UPI/Netbanking/Credit card gateway integration',
+        'Automated Shiprocket courier shipping rule configuration',
+        'Mobile-first responsive checkout with WhatsApp order tracking updates',
+      ],
+      implementationTimeline: '2 Weeks',
+    };
+  }
+
+  // 4. Boutique Brand Website & Digital Menu
   if (t.includes('boutique brand website') || t.includes('digital menu') || (t.includes('website') && t.includes('menu'))) {
     return {
       techStack: ['Next.js 16 (React)', 'Tailwind CSS', 'Framer Motion', 'Vercel CDN', 'QR Standee Engine'],
@@ -609,7 +754,7 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // 2. Direct Takeaway Ordering Engine
+  // 5. Direct Takeaway Ordering Engine
   if (t.includes('direct takeaway') || t.includes('takeaway ordering') || t.includes('online ordering') || typeStr === 'ONLINE_ORDERING') {
     return {
       techStack: ['Next.js PWA', 'Supabase Database', 'Razorpay Gateway (UPI/Card)', 'WhatsApp Webhooks'],
@@ -636,33 +781,7 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // 3. WhatsApp Table Reservation Bot
-  if (t.includes('table reservation') || t.includes('whatsapp table') || (t.includes('whatsapp') && t.includes('bot'))) {
-    return {
-      techStack: ['Meta WhatsApp Cloud API', 'NodeJS Webhook Handler', 'Google Sheets / Supabase DB', 'Tailwind Reservation Table'],
-      freeAlternatives: [
-        'Meta Cloud API (First 1,000 service conversations FREE every month)',
-        'Supabase Free Tier / Google Sheets DB API ($0)',
-        'Vercel Serverless Functions ($0)',
-      ],
-      devCost: 0,
-      pitchPrice: 35000,
-      estimatedProfit: 35000,
-      profitMarginPercent: 100,
-      clientMonthlySaaS: 1500,
-      clientProfitROI: 'Automates 100% of weekend table bookings with zero staff phone answering overhead. Reduces customer no-shows by 40% using automated 2-hour reminder nudges.',
-      deliverables: [
-        'Official WhatsApp Business Cloud API automated greeting & interactive booking flow',
-        'Party size, seating preference (indoor/outdoor) and time slot logger',
-        'Instant WhatsApp confirmation pass generated & sent to guest',
-        'Receptionist daily table reservation management dashboard',
-        'Post-dining automated Google Review request trigger to boost 5-star ratings',
-      ],
-      implementationTimeline: '1 – 2 Weeks',
-    };
-  }
-
-  // 4. Broker Lead Distribution & Routing CRM
+  // 6. Broker Lead Distribution & Routing CRM
   if (t.includes('broker lead') || t.includes('lead distribution') || t.includes('broker crm')) {
     return {
       techStack: ['Next.js 16 App Router', 'Supabase Database', 'Twilio Routing API', 'Prisma ORM'],
@@ -687,7 +806,7 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // 5. Interactive Property Search & Video Tour Portal
+  // 7. Interactive Property Search & Video Tour Portal
   if (t.includes('property search') || t.includes('video tour') || t.includes('property portal')) {
     return {
       techStack: ['Next.js', 'Mapbox GL JS', 'Cloudinary Video CDN', 'PostgreSQL'],
@@ -712,7 +831,7 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // 6. 24/7 AI Phone Assistant & Voice Agent
+  // 8. 24/7 AI Phone Assistant & Voice Agent
   if (t.includes('voice agent') || t.includes('phone assistant') || typeStr === 'AI_VOICE_AGENT') {
     return {
       techStack: ['Vapi.ai Voice Engine', 'OpenAI GPT-4o-mini', 'Twilio SIP Trunking', 'Cal.com Webhooks'],
@@ -737,7 +856,42 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // 7. General Appointment Booking Engine
+  // 9. General CRM, Pipeline & Tracker Systems
+  if (
+    t.includes('crm') ||
+    t.includes('pipeline') ||
+    t.includes('tracker') ||
+    t.includes('admissions') ||
+    t.includes('membership') ||
+    typeStr === 'CRM' ||
+    typeStr === 'LEAD_CRM' ||
+    typeStr === 'MEMBERSHIP_CRM' ||
+    typeStr === 'ADMISSIONS_CRM'
+  ) {
+    return {
+      techStack: ['Next.js 16 App Router', 'Supabase Database', 'Prisma ORM', 'Tremor Charts'],
+      freeAlternatives: [
+        'Supabase Free Tier (500MB DB - $0)',
+        'Vercel Hobby Hosting ($0)',
+        'Prisma Studio / Local DB Tool ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 75000,
+      estimatedProfit: 75000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 2000,
+      clientProfitROI: 'Eliminates messy Excel spreadsheets, stops lead leakage across multi-week sales cycles, and gives business owners real-time visibility into deal closures.',
+      deliverables: [
+        'Visual sales Kanban board with drag-and-drop deal stages',
+        'Lead interaction logger & automated follow-up calendar',
+        'Staff assignment and role-based permissions',
+        'Revenue forecast and conversion rate dashboard',
+      ],
+      implementationTimeline: '2 – 3 Weeks',
+    };
+  }
+
+  // 10. General Appointment Booking Engine
   if (t.includes('appointment') || t.includes('booking') || typeStr === 'BOOKING' || typeStr === 'APPOINTMENT_BOOKING') {
     return {
       techStack: ['Cal.com Embed API', 'Supabase Database', 'Razorpay Payments', 'WhatsApp Reminders'],
@@ -762,11 +916,11 @@ export function getOpportunityBlueprint(title: string, type?: string): Opportuni
     };
   }
 
-  // Default / Website fallback
+  // 11. Website Redesign & Modern Business Website fallback
   return {
     techStack: ['Next.js 16', 'Tailwind CSS', 'Vercel Edge Network', 'Supabase'],
     freeAlternatives: [
-      'Vercel Hobby (Free Hosting)',
+      'Vercel Hobby (Free Hosting & SSL)',
       'Supabase Free Tier (500MB DB - $0)',
       'Cloudflare Free SSL & DNS',
     ],

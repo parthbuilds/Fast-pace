@@ -181,6 +181,17 @@ const MODULE_DETAILS_MAP: Record<
     roi: 'Establish independent digital brand authority. Capture qualified property buyers directly on your own platform, reducing manual tour coordination overhead by 40% and showcasing high-ticket listings 24/7.',
     industries: ['Real Estate', 'Brokers', 'Property Developers'],
   },
+  shopify_store: {
+    deliverables: [
+      'Custom Shopify OS 2.0 theme configuration (Dawn / High-Conversion architecture)',
+      'Razorpay UPI, Credit Card & NetBanking direct payment gateway integration',
+      'Automated Shiprocket courier rules & real-time tracking webhook setup',
+      'Mobile-first conversion design with abandoned cart WhatsApp recovery',
+      'Product category catalog setup, inventory manager & SEO schema',
+    ],
+    roi: 'Transform local offline inventory into nationwide D2C sales. Save 15-20% abandoned carts and automate end-to-end courier order dispatches.',
+    industries: ['Retail', 'Fashion & Apparel', 'Jewelry', 'Electronics', 'D2C Brands'],
+  },
 };
 
 export default function ServicesPage() {

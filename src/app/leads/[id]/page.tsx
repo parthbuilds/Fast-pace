@@ -516,12 +516,12 @@ export default function LeadDetailPage() {
                     key={opp.id}
                     className="p-4 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 text-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5">
                       <div>
                         <OpportunityBadge type={opp.type} title={opp.title} />
                         <span className="text-[10px] text-slate-400 font-mono block mt-1">⏱️ Timeline: {bp.implementationTimeline}</span>
                       </div>
-                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-500/20 whitespace-nowrap">
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-500/20 whitespace-nowrap self-start sm:self-auto">
                         {opp.confidenceScore}% Opportunity Confidence
                       </span>
                     </div>
@@ -530,7 +530,7 @@ export default function LeadDetailPage() {
 
                     {/* Tech Stack & Free Tools */}
                     <div className="space-y-1.5 pt-2 border-t border-slate-200/70 dark:border-slate-800/80">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center justify-between gap-1">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tech Stack & Free Tools</span>
                         <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">100% Free Tiers / $0 Dev Cost</span>
                       </div>
@@ -544,23 +544,23 @@ export default function LeadDetailPage() {
                     </div>
 
                     {/* Financial Matrix */}
-                    <div className="grid grid-cols-3 gap-2 p-2.5 bg-white dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800 text-[10px]">
-                      <div>
-                        <span className="text-slate-400 block font-medium">Pitch Price</span>
-                        <strong className="text-slate-900 dark:text-white text-xs">{formatCurrency(bp.pitchPrice)}</strong>
+                    <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2.5 bg-white dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800 text-[10px]">
+                      <div className="min-w-0">
+                        <span className="text-slate-400 block font-medium truncate">Pitch Price</span>
+                        <strong className="text-slate-900 dark:text-white text-[11px] sm:text-xs block truncate">{formatCurrency(bp.pitchPrice)}</strong>
                       </div>
-                      <div>
-                        <span className="text-slate-400 block font-medium">Dev Cost</span>
-                        <strong className="text-emerald-600 dark:text-emerald-400 text-xs">₹0 ($0 APIs)</strong>
+                      <div className="min-w-0">
+                        <span className="text-slate-400 block font-medium truncate">Dev Cost</span>
+                        <strong className="text-emerald-600 dark:text-emerald-400 text-[11px] sm:text-xs block truncate">₹0 ($0)</strong>
                       </div>
-                      <div>
-                        <span className="text-slate-400 block font-medium">Net Profit</span>
-                        <strong className="text-indigo-600 dark:text-indigo-400 text-xs">{formatCurrency(bp.estimatedProfit)} ({bp.profitMarginPercent}%)</strong>
+                      <div className="min-w-0">
+                        <span className="text-slate-400 block font-medium truncate">Net Profit</span>
+                        <strong className="text-indigo-600 dark:text-indigo-400 text-[11px] sm:text-xs block truncate">{formatCurrency(bp.estimatedProfit)} ({bp.profitMarginPercent}%)</strong>
                       </div>
                     </div>
 
                     {/* Client ROI Box */}
-                    <div className="p-2 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-lg border border-emerald-200/60 dark:border-emerald-900/40 text-[10px] text-emerald-900 dark:text-emerald-300">
+                    <div className="p-2.5 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-lg border border-emerald-200/60 dark:border-emerald-900/40 text-[10px] text-emerald-900 dark:text-emerald-300 leading-relaxed">
                       <strong className="font-bold block text-emerald-950 dark:text-emerald-200 mb-0.5">💰 Client ROI & Value Proposition:</strong>
                       <span>{bp.clientProfitROI}</span>
                     </div>
