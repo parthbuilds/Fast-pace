@@ -30,6 +30,8 @@ import {
   Trash2,
   MapPin,
   CalendarClock,
+  TrendingUp,
+  Wrench,
 } from 'lucide-react';
 import { LEAD_STATUS_CONFIG, formatCurrency, formatDate, formatRelativeTime } from '@/lib/utils';
 import { LeadScoreBadge } from '@/components/leads/LeadScoreBadge';
@@ -37,6 +39,7 @@ import { OpportunityScoreBadge } from '@/components/leads/OpportunityScoreBadge'
 import { LeadStatusBadge } from '@/components/leads/LeadStatusBadge';
 import { OpportunityBadge } from '@/components/leads/OpportunityBadge';
 import { generateOutreachTemplates } from '@/lib/outreach';
+import { getOpportunityBlueprint } from '@/lib/intelligence';
 
 export default function LeadDetailPage() {
   const params = useParams();
@@ -81,6 +84,13 @@ export default function LeadDetailPage() {
   const [propTitle, setPropTitle] = useState('');
   const [propPrice, setPropPrice] = useState(150000);
   const [savingProposal, setSavingProposal] = useState(false);
+
+  const handleSelectOpportunityForProposal = (opp: any) => {
+    const bp = getOpportunityBlueprint(opp.title, opp.type);
+    setPropTitle(`${opp.title} for ${lead?.business?.name || 'Client'}`);
+    setPropPrice(bp.pitchPrice);
+    setActiveTab('proposal');
+  };
 
   const fetchLeadDetails = async () => {
     try {
@@ -499,20 +509,73 @@ export default function LeadDetailPage() {
             </div>
 
             <div className="space-y-3">
-              {opportunities.map((opp: any) => (
-                <div
-                  key={opp.id}
-                  className="p-3.5 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs"
-                >
-                  <div className="flex items-center justify-between">
-                    <OpportunityBadge type={opp.type} title={opp.title} />
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                      {opp.confidenceScore}% match
-                    </span>
+              {opportunities.map((opp: any) => {
+                const bp = getOpportunityBlueprint(opp.title, opp.type);
+                return (
+                  <div
+                    key={opp.id}
+                    className="p-4 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 text-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <OpportunityBadge type={opp.type} title={opp.title} />
+                        <span className="text-[10px] text-slate-400 font-mono block mt-1">⏱️ Timeline: {bp.implementationTimeline}</span>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-500/20 whitespace-nowrap">
+                        {opp.confidenceScore}% Opportunity Confidence
+                      </span>
+                    </div>
+
+                    <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">{opp.reason || opp.description}</p>
+
+                    {/* Tech Stack & Free Tools */}
+                    <div className="space-y-1.5 pt-2 border-t border-slate-200/70 dark:border-slate-800/80">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tech Stack & Free Tools</span>
+                        <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">100% Free Tiers / $0 Dev Cost</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {bp.techStack.map((tech: string) => (
+                          <span key={tech} className="text-[9px] font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded border border-blue-200/50 dark:border-blue-700/50">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Financial Matrix */}
+                    <div className="grid grid-cols-3 gap-2 p-2.5 bg-white dark:bg-slate-950/80 rounded-lg border border-slate-200 dark:border-slate-800 text-[10px]">
+                      <div>
+                        <span className="text-slate-400 block font-medium">Pitch Price</span>
+                        <strong className="text-slate-900 dark:text-white text-xs">{formatCurrency(bp.pitchPrice)}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Dev Cost</span>
+                        <strong className="text-emerald-600 dark:text-emerald-400 text-xs">₹0 ($0 APIs)</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Net Profit</span>
+                        <strong className="text-indigo-600 dark:text-indigo-400 text-xs">{formatCurrency(bp.estimatedProfit)} ({bp.profitMarginPercent}%)</strong>
+                      </div>
+                    </div>
+
+                    {/* Client ROI Box */}
+                    <div className="p-2 bg-emerald-50/70 dark:bg-emerald-950/20 rounded-lg border border-emerald-200/60 dark:border-emerald-900/40 text-[10px] text-emerald-900 dark:text-emerald-300">
+                      <strong className="font-bold block text-emerald-950 dark:text-emerald-200 mb-0.5">💰 Client ROI & Value Proposition:</strong>
+                      <span>{bp.clientProfitROI}</span>
+                    </div>
+
+                    {/* Action Button */}
+                    <button
+                      onClick={() => handleSelectOpportunityForProposal(opp)}
+                      className="w-full py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-600/20 hover:bg-indigo-100 dark:hover:bg-indigo-600/30 text-indigo-600 dark:text-indigo-300 text-[11px] font-bold border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Pitch Solution (Pre-fill Proposal) &rarr;</span>
+                    </button>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">{opp.reason}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -611,21 +674,161 @@ export default function LeadDetailPage() {
 
       {/* TAB 3: OPPORTUNITIES */}
       {activeTab === 'opportunities' && (
-        <div className="space-y-4">
-          {opportunities.map((opp: any) => (
-            <div
-              key={opp.id}
-              className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3"
-            >
-              <div className="flex items-center justify-between">
-                <OpportunityBadge type={opp.type} title={opp.title} />
-                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                  {opp.confidenceScore}% Opportunity Confidence
-                </span>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{opp.reason}</p>
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">Detected Opportunity Blueprints & Pitch Playbooks</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Detailed tech stacks, 100% free tool alternatives, pricing matrices, and ROI pitches for {biz.name}.
+              </p>
             </div>
-          ))}
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1 rounded-xl border border-indigo-200 dark:border-indigo-500/30 whitespace-nowrap">
+              {opportunities.length} High-Impact Opportunities
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            {opportunities.map((opp: any) => {
+              const bp = getOpportunityBlueprint(opp.title, opp.type);
+              return (
+                <div
+                  key={opp.id}
+                  className="bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5"
+                >
+                  {/* Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <OpportunityBadge type={opp.type} title={opp.title} />
+                        <span className="text-xs text-slate-400 font-mono">⏱️ {bp.implementationTimeline}</span>
+                      </div>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white mt-1">
+                        {opp.title}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-500/20 whitespace-nowrap">
+                        {opp.confidenceScore}% Opportunity Confidence
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Problem & Diagnosis */}
+                  <div>
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      Problem & Opportunity Diagnosis
+                    </h4>
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      {opp.reason || opp.description}
+                    </p>
+                  </div>
+
+                  {/* Tech Stack & 100% Free Tools Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                      <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                        🛠️ Recommended Tech Stack
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {bp.techStack.map((tech: string) => (
+                          <span key={tech} className="text-xs font-semibold bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
+                        🎁 Free Tools & $0 Alternatives (Zero Developer Setup Cost)
+                      </span>
+                      <ul className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                        {bp.freeAlternatives.map((alt: string) => (
+                          <li key={alt} className="flex items-center gap-1.5">
+                            <span className="text-emerald-500 font-bold">✓</span>
+                            <span>{alt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Scope Deliverables */}
+                  <div className="p-4 bg-slate-50/70 dark:bg-slate-900/40 rounded-xl border border-slate-200/80 dark:border-slate-800/80 space-y-2">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                      📋 What The Client Receives (Scope Deliverables)
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 dark:text-slate-300">
+                      {bp.deliverables.map((del: string) => (
+                        <div key={del} className="flex items-start gap-1.5">
+                          <span className="text-indigo-500 font-bold mt-0.5">•</span>
+                          <span>{del}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Financial Earnings Matrix & Client Profit Box */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-indigo-50/60 dark:bg-indigo-950/20 rounded-xl border border-indigo-200/60 dark:border-indigo-900/40 space-y-1">
+                      <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider block">
+                        Recommended Pitch Price
+                      </span>
+                      <div className="text-xl font-black text-indigo-900 dark:text-indigo-200">
+                        {formatCurrency(bp.pitchPrice)}
+                      </div>
+                      <span className="text-[10px] text-indigo-600/80 dark:text-indigo-400 block">Upfront one-time build fee</span>
+                    </div>
+
+                    <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-xl border border-emerald-200/60 dark:border-emerald-900/40 space-y-1">
+                      <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider block">
+                        Your Net Earnings (Profit)
+                      </span>
+                      <div className="text-xl font-black text-emerald-900 dark:text-emerald-200">
+                        {formatCurrency(bp.estimatedProfit)}
+                      </div>
+                      <span className="text-[10px] text-emerald-600/80 dark:text-emerald-400 block">
+                        {bp.profitMarginPercent}% Margin (₹0 Dev tool cost)
+                      </span>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Client SaaS / Cloud Hosting
+                      </span>
+                      <div className="text-xl font-black text-slate-900 dark:text-white">
+                        {formatCurrency(bp.clientMonthlySaaS)}<span className="text-xs font-normal text-slate-400">/mo</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 block">Billed directly to client</span>
+                    </div>
+                  </div>
+
+                  {/* Client Business Profit & ROI Case */}
+                  <div className="p-4 bg-amber-50/70 dark:bg-amber-950/20 rounded-xl border border-amber-200/80 dark:border-amber-900/50 space-y-1 text-xs">
+                    <span className="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <TrendingUp className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      <span>Why The Client Will Buy (Profit & ROI Justification)</span>
+                    </span>
+                    <p className="text-amber-950 dark:text-amber-200/90 leading-relaxed text-[11px]">
+                      {bp.clientProfitROI}
+                    </p>
+                  </div>
+
+                  {/* Pitch Action Buttons */}
+                  <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+                    <button
+                      onClick={() => handleSelectOpportunityForProposal(opp)}
+                      className="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-xs shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Pre-fill Proposal With This Scope</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 

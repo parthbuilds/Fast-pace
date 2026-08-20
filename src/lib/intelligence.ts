@@ -200,26 +200,26 @@ export const INDUSTRY_OPPORTUNITY_RULES: Record<string, IndustryOpportunityRule>
     opportunities: [
       {
         type: 'WEBSITE_REDESIGN',
-        title: 'High-Converting Digital Menu & Brand Website',
-        description: 'Modern mobile-first website showcasing signature dishes, ambience photos, and location hours.',
-        confidence: 85,
+        title: 'Boutique Brand Website & Digital Menu',
+        description: 'High-aesthetic culinary showcase featuring signature menus, dish photography, ambience stories, and instant table booking links.',
+        confidence: 95,
         impact: 'HIGH',
         applicableModules: ['business_website', 'online_ordering_menu'],
       },
       {
         type: 'ONLINE_ORDERING',
-        title: 'Direct Zero-Commission Online Ordering',
-        description: 'Save 20-30% aggregator commissions with direct customer ordering and pickup/delivery coordination.',
+        title: 'Direct Takeaway Ordering Engine',
+        description: 'Direct zero-commission customer pickup and delivery orders with UPI/Card payment integration. Save 25-30% on Zomato/Swiggy fees.',
         confidence: 90,
         impact: 'HIGH',
         applicableModules: ['online_ordering_menu', 'payment_billing'],
       },
       {
         type: 'WHATSAPP_WORKFLOW',
-        title: 'WhatsApp Table Reservation & Menu Bot',
-        description: 'Instant WhatsApp reservation confirmation and automated Google review requests post-dining.',
-        confidence: 80,
-        impact: 'MEDIUM',
+        title: 'WhatsApp Table Reservation Bot',
+        description: 'Automated table bookings for weekend dinners with instant confirmation and automated Google review requests post-dining.',
+        confidence: 85,
+        impact: 'HIGH',
         applicableModules: ['whatsapp_automation', 'customer_loyalty'],
       },
       {
@@ -564,3 +564,225 @@ export function detectOpportunitiesForBusiness(
 
   return detected.slice(0, 4); // return top 4 best opportunities
 }
+
+export interface OpportunityBlueprint {
+  techStack: string[];
+  freeAlternatives: string[];
+  devCost: number; // in INR
+  pitchPrice: number; // in INR
+  estimatedProfit: number; // in INR
+  profitMarginPercent: number;
+  clientMonthlySaaS: number; // in INR
+  clientProfitROI: string;
+  deliverables: string[];
+  implementationTimeline: string;
+}
+
+export function getOpportunityBlueprint(title: string, type?: string): OpportunityBlueprint {
+  const t = (title || '').toLowerCase();
+  const typeStr = (type || '').toUpperCase();
+
+  // 1. Boutique Brand Website & Digital Menu
+  if (t.includes('boutique brand website') || t.includes('digital menu') || (t.includes('website') && t.includes('menu'))) {
+    return {
+      techStack: ['Next.js 16 (React)', 'Tailwind CSS', 'Framer Motion', 'Vercel CDN', 'QR Standee Engine'],
+      freeAlternatives: [
+        'Vercel Hobby (100% Free Hosting & SSL)',
+        'GitHub Pages / Cloudflare (Free Static CDN)',
+        'Unsplash & Google Fonts (Free Commercial Assets)',
+        'Open-Source Canvas QR Generator ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 45000,
+      estimatedProfit: 45000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1250,
+      clientProfitROI: 'Drives direct organic footfall from Google Maps & Search. Increases average customer order value by 15-25% via visual dish photos and instant digital menu browsing.',
+      deliverables: [
+        'Custom mobile-first responsive web app',
+        'Digital menu with high-res food photos, modifiers & allergen tags',
+        'Dine-in QR code table standees generator for instant ordering/browsing',
+        'Google Search Console & Local SEO map schema integration',
+        'Direct 1-click WhatsApp enquiry & reservation button',
+      ],
+      implementationTimeline: '1.5 – 2 Weeks',
+    };
+  }
+
+  // 2. Direct Takeaway Ordering Engine
+  if (t.includes('direct takeaway') || t.includes('takeaway ordering') || t.includes('online ordering') || typeStr === 'ONLINE_ORDERING') {
+    return {
+      techStack: ['Next.js PWA', 'Supabase Database', 'Razorpay Gateway (UPI/Card)', 'WhatsApp Webhooks'],
+      freeAlternatives: [
+        'Supabase Free Tier (500MB DB, Auth included - $0)',
+        'Vercel Hobby ($0)',
+        'Razorpay Standard (0 setup fees, 2% per txn charged on sale)',
+        'Node.js Serverless Webhooks ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 65000,
+      estimatedProfit: 65000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1850,
+      clientProfitROI: 'Eliminates 25-30% food delivery aggregator commissions (Zomato/Swiggy). For a restaurant doing ₹4,00,000 monthly takeaway volume, this adds ₹1,00,000 to ₹1,20,000 in pure cash margin every single month.',
+      deliverables: [
+        '0% commission takeaway cart & direct checkout portal',
+        'Instant UPI, Google Pay & Card payment settlement directly to restaurant bank',
+        'Instant kitchen WhatsApp order alert with customer details & address',
+        'Custom dish modifier selector (extra toppings, spice level, preparation notes)',
+        'Live customer order status screen (Received, Preparing, Ready for Pickup)',
+      ],
+      implementationTimeline: '2 – 3 Weeks',
+    };
+  }
+
+  // 3. WhatsApp Table Reservation Bot
+  if (t.includes('table reservation') || t.includes('whatsapp table') || (t.includes('whatsapp') && t.includes('bot'))) {
+    return {
+      techStack: ['Meta WhatsApp Cloud API', 'NodeJS Webhook Handler', 'Google Sheets / Supabase DB', 'Tailwind Reservation Table'],
+      freeAlternatives: [
+        'Meta Cloud API (First 1,000 service conversations FREE every month)',
+        'Supabase Free Tier / Google Sheets DB API ($0)',
+        'Vercel Serverless Functions ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 35000,
+      estimatedProfit: 35000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 1500,
+      clientProfitROI: 'Automates 100% of weekend table bookings with zero staff phone answering overhead. Reduces customer no-shows by 40% using automated 2-hour reminder nudges.',
+      deliverables: [
+        'Official WhatsApp Business Cloud API automated greeting & interactive booking flow',
+        'Party size, seating preference (indoor/outdoor) and time slot logger',
+        'Instant WhatsApp confirmation pass generated & sent to guest',
+        'Receptionist daily table reservation management dashboard',
+        'Post-dining automated Google Review request trigger to boost 5-star ratings',
+      ],
+      implementationTimeline: '1 – 2 Weeks',
+    };
+  }
+
+  // 4. Broker Lead Distribution & Routing CRM
+  if (t.includes('broker lead') || t.includes('lead distribution') || t.includes('broker crm')) {
+    return {
+      techStack: ['Next.js 16 App Router', 'Supabase Database', 'Twilio Routing API', 'Prisma ORM'],
+      freeAlternatives: [
+        'Supabase Free Tier ($0)',
+        'Twilio Pay-As-You-Go ($0.01 per SMS)',
+        'Vercel Hobby Hosting ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 85000,
+      estimatedProfit: 85000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 2500,
+      clientProfitROI: 'Speeds up property buyer response times from 4 hours to under 3 minutes. Closes up to 35% more high-ticket real estate sales commissions by eliminating lead dropping.',
+      deliverables: [
+        'Broker round-robin distribution engine based on agent availability',
+        'Instant SMS/WhatsApp lead alert to on-duty brokers',
+        'Buyer requirement logger & property matching filter',
+        'Agency owner commission & pipeline conversion analytics',
+      ],
+      implementationTimeline: '3 Weeks',
+    };
+  }
+
+  // 5. Interactive Property Search & Video Tour Portal
+  if (t.includes('property search') || t.includes('video tour') || t.includes('property portal')) {
+    return {
+      techStack: ['Next.js', 'Mapbox GL JS', 'Cloudinary Video CDN', 'PostgreSQL'],
+      freeAlternatives: [
+        'Mapbox Free Tier (50,000 map loads/mo - $0)',
+        'Cloudinary Free Tier (25GB video bandwidth/mo - $0)',
+        'Vercel Hobby ($0)',
+      ],
+      devCost: 0,
+      pitchPrice: 75000,
+      estimatedProfit: 75000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 2000,
+      clientProfitROI: 'Attracts high-net-worth property buyers directly without paying expensive listing fees on external portals. Cuts down redundant physical visits by 40% through immersive HD video tours.',
+      deliverables: [
+        'Multi-attribute property filter (Price, BHK, Locality, Amenities)',
+        'Interactive Mapbox map view with custom area landmarks',
+        'Embedded high-definition video walkthrough player & image lightbox',
+        'Direct broker consultation scheduling form',
+      ],
+      implementationTimeline: '3 Weeks',
+    };
+  }
+
+  // 6. 24/7 AI Phone Assistant & Voice Agent
+  if (t.includes('voice agent') || t.includes('phone assistant') || typeStr === 'AI_VOICE_AGENT') {
+    return {
+      techStack: ['Vapi.ai Voice Engine', 'OpenAI GPT-4o-mini', 'Twilio SIP Trunking', 'Cal.com Webhooks'],
+      freeAlternatives: [
+        'Vapi.ai ($10 free testing credit included)',
+        'OpenAI API pay-per-token (~$0.002 per call)',
+        'Cal.com Free Tier ($0)',
+      ],
+      devCost: 500,
+      pitchPrice: 90000,
+      estimatedProfit: 89500,
+      profitMarginPercent: 99.4,
+      clientMonthlySaaS: 4500,
+      clientProfitROI: 'Replaces an expensive ₹25,000/mo front-desk phone operator. Never misses incoming bookings after-hours, capturing 20+ additional paying clients every month.',
+      deliverables: [
+        'Natural conversational voice assistant with custom business personality & FAQs',
+        'Live phone appointment scheduling synced to staff calendar',
+        'Intelligent caller qualification & urgent lead escalation to owner',
+        'Instant call audio recording, transcription & summary sent to WhatsApp',
+      ],
+      implementationTimeline: '2 Weeks',
+    };
+  }
+
+  // 7. General Appointment Booking Engine
+  if (t.includes('appointment') || t.includes('booking') || typeStr === 'BOOKING' || typeStr === 'APPOINTMENT_BOOKING') {
+    return {
+      techStack: ['Cal.com Embed API', 'Supabase Database', 'Razorpay Payments', 'WhatsApp Reminders'],
+      freeAlternatives: [
+        'Cal.com Open Source / Free Tier ($0)',
+        'Supabase Free Tier ($0)',
+        'Meta WhatsApp API (1,000 free msgs/mo)',
+      ],
+      devCost: 0,
+      pitchPrice: 55000,
+      estimatedProfit: 55000,
+      profitMarginPercent: 100,
+      clientMonthlySaaS: 2400,
+      clientProfitROI: 'Eliminates back-and-forth phone scheduling friction. Allows customers to book 24/7, reducing front-desk staff load and cutting no-shows by 35%.',
+      deliverables: [
+        'Self-service calendar slot booking widget',
+        'Staff multi-calendar sync (Google, Apple, Outlook)',
+        'Intake consultation questionnaire with pre-payment deposit',
+        'Automated day-before WhatsApp confirmation reminders',
+      ],
+      implementationTimeline: '2 Weeks',
+    };
+  }
+
+  // Default / Website fallback
+  return {
+    techStack: ['Next.js 16', 'Tailwind CSS', 'Vercel Edge Network', 'Supabase'],
+    freeAlternatives: [
+      'Vercel Hobby (Free Hosting)',
+      'Supabase Free Tier (500MB DB - $0)',
+      'Cloudflare Free SSL & DNS',
+    ],
+    devCost: 0,
+    pitchPrice: 45000,
+    estimatedProfit: 45000,
+    profitMarginPercent: 100,
+    clientMonthlySaaS: 1250,
+    clientProfitROI: 'Builds direct organic trust, elevates local search ranking on Google, and captures customer enquiries directly with zero middleman commissions.',
+    deliverables: [
+      'Modern responsive web application optimized for mobile speed',
+      'Contact forms, enquiry logger, and WhatsApp quick connect',
+      'Local SEO metadata and Google Search Console setup',
+      'Fast SSL hosting on global Edge network',
+    ],
+    implementationTimeline: '2 Weeks',
+  };
+}
+
