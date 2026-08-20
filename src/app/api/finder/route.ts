@@ -130,7 +130,9 @@ export async function POST(req: NextRequest) {
             leadScore: scores.leadScore,
             opportunityScore: scores.opportunityScore,
             priority: scores.priority,
-            estimatedValue: 1500,
+            budgetPotential: scores.budgetPotential,
+            qualificationStatus: scores.qualificationStatus,
+            estimatedValue: scores.estimatedValue,
           },
           include: {
             business: true,

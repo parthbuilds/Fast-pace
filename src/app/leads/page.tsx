@@ -27,6 +27,8 @@ export default function LeadsDatabasePage() {
   const [category, setCategory] = useState('ALL');
   const [hasPhone, setHasPhone] = useState('ALL');
   const [hasWebsite, setHasWebsite] = useState('ALL');
+  const [budgetPotential, setBudgetPotential] = useState('ALL');
+  const [qualificationStatus, setQualificationStatus] = useState('ALL');
   const [minOppScore, setMinOppScore] = useState<number>(0);
   const [sortBy, setSortBy] = useState('opportunityScore');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -46,6 +48,8 @@ export default function LeadsDatabasePage() {
       if (hasPhone !== 'ALL') params.append('hasPhone', hasPhone);
       if (hasWebsite !== 'ALL') params.append('hasWebsite', hasWebsite);
       if (minOppScore > 0) params.append('minOppScore', minOppScore.toString());
+      if (budgetPotential !== 'ALL') params.append('budgetPotential', budgetPotential);
+      if (qualificationStatus !== 'ALL') params.append('qualificationStatus', qualificationStatus);
       params.append('sortBy', sortBy);
       params.append('sortOrder', sortOrder);
 
@@ -64,7 +68,7 @@ export default function LeadsDatabasePage() {
 
   useEffect(() => {
     fetchLeads();
-  }, [status, category, hasPhone, hasWebsite, minOppScore, sortBy, sortOrder]);
+  }, [status, category, hasPhone, hasWebsite, minOppScore, sortBy, sortOrder, budgetPotential, qualificationStatus]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,7 +157,7 @@ export default function LeadsDatabasePage() {
         </form>
 
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
           {/* Status Filter */}
           <div className="space-y-1">
             <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -162,7 +166,7 @@ export default function LeadsDatabasePage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="ALL">All Statuses</option>
               {Object.keys(LEAD_STATUS_CONFIG).map((st) => (
@@ -181,7 +185,7 @@ export default function LeadsDatabasePage() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="ALL">All Categories</option>
               {CATEGORIES.map((c) => (
@@ -200,10 +204,10 @@ export default function LeadsDatabasePage() {
             <select
               value={hasWebsite}
               onChange={(e) => setHasWebsite(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="ALL">All</option>
-              <option value="false">⚠️ No Website (Prime)</option>
+              <option value="false">⚠️ No Website</option>
               <option value="true">🌐 Has Website</option>
             </select>
           </div>
@@ -216,11 +220,45 @@ export default function LeadsDatabasePage() {
             <select
               value={hasPhone}
               onChange={(e) => setHasPhone(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="ALL">All</option>
               <option value="true">📞 Phone Available</option>
               <option value="false">No Phone</option>
+            </select>
+          </div>
+
+          {/* Budget Potential Filter */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Est. Budget
+            </label>
+            <select
+              value={budgetPotential}
+              onChange={(e) => setBudgetPotential(e.target.value)}
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+            >
+              <option value="ALL">All Budgets</option>
+              <option value="HIGH">💰 High Budget</option>
+              <option value="MEDIUM">Standard</option>
+              <option value="LOW">Low / Tiny</option>
+            </select>
+          </div>
+
+          {/* Qualification Filter */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Lead Target
+            </label>
+            <select
+              value={qualificationStatus}
+              onChange={(e) => setQualificationStatus(e.target.value)}
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+            >
+              <option value="ALL">All Targets</option>
+              <option value="QUALIFIED">✅ Qualified Leads</option>
+              <option value="NURTURE">Nurture</option>
+              <option value="LOW_PRIORITY">⚠️ Low Priority (Mom/Pop)</option>
             </select>
           </div>
 
@@ -232,7 +270,7 @@ export default function LeadsDatabasePage() {
             <select
               value={minOppScore}
               onChange={(e) => setMinOppScore(Number(e.target.value))}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value={0}>Any Score</option>
               <option value={70}>70+ (Strong Opp)</option>
@@ -249,7 +287,7 @@ export default function LeadsDatabasePage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
+              className="w-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 py-1.5 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer"
             >
               <option value="opportunityScore">Opp. Score (High to Low)</option>
               <option value="leadScore">Lead Score</option>

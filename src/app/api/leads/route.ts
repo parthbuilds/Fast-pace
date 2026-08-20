@@ -8,6 +8,8 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get('status') || '';
     const category = searchParams.get('category') || '';
     const priority = searchParams.get('priority') || '';
+    const budgetPotential = searchParams.get('budgetPotential') || '';
+    const qualificationStatus = searchParams.get('qualificationStatus') || '';
     const hasPhone = searchParams.get('hasPhone');
     const hasWebsite = searchParams.get('hasWebsite');
     const minOpportunityScore = searchParams.get('minOppScore');
@@ -22,6 +24,14 @@ export async function GET(req: NextRequest) {
 
     if (priority && priority !== 'ALL') {
       whereClause.priority = priority;
+    }
+
+    if (budgetPotential && budgetPotential !== 'ALL') {
+      whereClause.budgetPotential = budgetPotential;
+    }
+
+    if (qualificationStatus && qualificationStatus !== 'ALL') {
+      whereClause.qualificationStatus = qualificationStatus;
     }
 
     if (minOpportunityScore) {

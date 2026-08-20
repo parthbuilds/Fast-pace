@@ -23,6 +23,9 @@ export function calculateScores(inputs: ScoringInputs): {
   leadScore: number;
   opportunityScore: number;
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  budgetPotential: 'HIGH' | 'MEDIUM' | 'LOW';
+  qualificationStatus: 'QUALIFIED' | 'NURTURE' | 'LOW_PRIORITY';
+  estimatedValue: number;
   breakdown: {
     leadFactors: Array<{ label: string; points: number }>;
     opportunityFactors: Array<{ label: string; points: number }>;
@@ -143,10 +146,37 @@ export function calculateScores(inputs: ScoringInputs): {
     priority = 'LOW';
   }
 
+  // 3. Dynamic Qualification & Budget Metrics
+  let budgetPotential: 'HIGH' | 'MEDIUM' | 'LOW' = 'MEDIUM';
+  const reviews = inputs.reviewCount || 0;
+  
+  if (isHighTicket || reviews >= 40) {
+    budgetPotential = 'HIGH';
+  } else if (reviews < 10 && !inputs.hasWebsite) {
+    budgetPotential = 'LOW';
+  }
+
+  let qualificationStatus: 'QUALIFIED' | 'NURTURE' | 'LOW_PRIORITY' = 'NURTURE';
+  if (budgetPotential === 'LOW') {
+    qualificationStatus = 'LOW_PRIORITY';
+  } else if (inputs.hasPhone) {
+    qualificationStatus = 'QUALIFIED';
+  }
+
+  let estimatedValue = 1800;
+  if (budgetPotential === 'HIGH') {
+    estimatedValue = 3000;
+  } else if (budgetPotential === 'LOW') {
+    estimatedValue = 800;
+  }
+
   return {
     leadScore: boundedLeadScore,
     opportunityScore: boundedOpportunityScore,
     priority,
+    budgetPotential,
+    qualificationStatus,
+    estimatedValue,
     breakdown: {
       leadFactors,
       opportunityFactors,

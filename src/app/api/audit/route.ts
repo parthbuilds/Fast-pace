@@ -98,6 +98,9 @@ export async function POST(req: NextRequest) {
           leadScore: updatedScores.leadScore,
           opportunityScore: updatedScores.opportunityScore,
           priority: updatedScores.priority,
+          budgetPotential: updatedScores.budgetPotential,
+          qualificationStatus: updatedScores.qualificationStatus,
+          estimatedValue: updatedScores.estimatedValue,
         },
       });
 
