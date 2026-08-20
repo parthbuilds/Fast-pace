@@ -418,8 +418,8 @@ export default function ServicesPage() {
                   <div className="border-t border-slate-100 dark:border-slate-800/80 pt-4 mt-4 space-y-2">
                     {/* Recurring details */}
                     <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
-                      <span>Client recurring: <strong>${module.clientMonthlyCost}/mo</strong></span>
-                      <span>Self-cost: <strong>${module.devSelfCost}/mo</strong></span>
+                      <span>Client recurring: <strong>{formatCurrency(module.clientMonthlyCost)}/mo</strong></span>
+                      <span>Self-cost: <strong>{formatCurrency(module.devSelfCost)}/mo</strong></span>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -488,14 +488,14 @@ export default function ServicesPage() {
                     <Coins className="w-3.5 h-3.5 text-indigo-400" />
                     <span>Client Recurring:</span>
                   </span>
-                  <span className="font-bold text-white">${totalClientMonthlyCost}/mo</span>
+                  <span className="font-bold text-white">{formatCurrency(totalClientMonthlyCost)}/month</span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-400 flex items-center gap-1.5">
+                  <span className="text-slate-400 flex-shrink-0 flex items-center gap-1.5">
                     <Cpu className="w-3.5 h-3.5 text-slate-500" />
                     <span>Developer Self-Cost:</span>
                   </span>
-                  <span className="font-bold text-slate-300">${totalDevSelfCost}/mo</span>
+                  <span className="font-bold text-slate-300">{formatCurrency(totalDevSelfCost)}/month</span>
                 </div>
                 <div className="pt-1.5 border-t border-slate-800/80 flex items-center gap-1 text-[10px] text-indigo-400 italic">
                   <AlertCircle className="w-3 h-3 flex-shrink-0" />

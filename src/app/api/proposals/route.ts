@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       scopeFeatures,
       timelineWeeks = 3,
       price,
-      currency = 'USD',
+      currency = 'INR',
       paymentSchedule,
       maintenanceTerms,
       termsConditions,

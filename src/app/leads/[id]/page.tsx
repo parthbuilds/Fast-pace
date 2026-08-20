@@ -79,7 +79,7 @@ export default function LeadDetailPage() {
 
   // Proposal Quick State
   const [propTitle, setPropTitle] = useState('');
-  const [propPrice, setPropPrice] = useState(1800);
+  const [propPrice, setPropPrice] = useState(150000);
   const [savingProposal, setSavingProposal] = useState(false);
 
   const fetchLeadDetails = async () => {
@@ -88,6 +88,9 @@ export default function LeadDetailPage() {
       const data = await res.json();
       if (data.success) {
         setLead(data.lead);
+        if (data.lead.estimatedValue) {
+          setPropPrice(data.lead.estimatedValue);
+        }
         if (data.lead.qualificationStatus) {
           setQualHasProblem(data.lead.hasProblem || 'YES');
           setQualDecisionMaker(data.lead.decisionMaker || 'YES');
@@ -480,7 +483,7 @@ export default function LeadDetailPage() {
               <div>
                 <span className="text-slate-500 block text-[11px]">Est. Deal Value</span>
                 <span className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">
-                  {formatCurrency(lead.estimatedValue || 1500)}
+                  {formatCurrency(lead.estimatedValue || 150000)}
                 </span>
               </div>
             </div>
@@ -893,7 +896,7 @@ export default function LeadDetailPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-slate-600 dark:text-slate-400 font-semibold">Fixed Project Investment ($ USD)</label>
+              <label className="text-slate-600 dark:text-slate-400 font-semibold">Fixed Project Investment (₹ INR)</label>
               <input
                 type="number"
                 value={propPrice}

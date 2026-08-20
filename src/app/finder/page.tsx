@@ -468,6 +468,9 @@ export default function LeadFinderPage() {
                       <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal block truncate max-w-xs">
                         {lead.address || lead.area || 'Bangalore'}
                       </span>
+                      <span className="text-[10px] text-amber-500 font-semibold block mt-0.5">
+                        ⭐ {lead.rating ? `${lead.rating} / 5.0 (${lead.reviewCount || 0} reviews)` : 'No ratings yet'}
+                      </span>
                     </td>
                     <td className="py-3.5 px-3">
                       <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-medium border border-slate-200 dark:border-slate-700">

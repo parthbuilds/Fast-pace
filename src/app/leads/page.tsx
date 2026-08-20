@@ -349,6 +349,9 @@ export default function LeadsDatabasePage() {
                         <span className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-xs block font-normal">
                           {lead.business.address || lead.business.area || 'Bangalore'}
                         </span>
+                        <span className="text-[10px] text-amber-500 font-semibold block mt-0.5">
+                          ⭐ {lead.business.rating ? `${lead.business.rating} / 5.0 (${lead.business.reviewCount || 0} reviews)` : 'No ratings yet'}
+                        </span>
                       </td>
 
                       <td className="py-3.5 px-3">
@@ -418,7 +421,7 @@ export default function LeadsDatabasePage() {
                       </td>
 
                       <td className="py-3.5 px-3 font-semibold text-emerald-600 dark:text-emerald-400 text-xs">
-                        {formatCurrency(lead.estimatedValue || 1500)}
+                        {formatCurrency(lead.estimatedValue || 150000)}
                       </td>
 
                       <td className="py-3.5 px-4 text-right">

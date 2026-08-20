@@ -17,6 +17,7 @@ import {
   Settings,
   Zap,
   Sparkles,
+  Receipt,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +40,7 @@ const PRIMARY_NAV: NavItem[] = [
   { label: 'Client Discovery', href: '/discovery', icon: FileQuestion },
   { label: 'Services & Pricing', href: '/services', icon: Sparkles },
   { label: 'Proposal Builder', href: '/proposals', icon: FileText },
+  { label: 'Invoice Generator', href: '/invoices', icon: Receipt },
   { label: 'Clients & Projects', href: '/clients', icon: Users },
   { label: 'Settings', href: '/settings', icon: Settings },
 ];

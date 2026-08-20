@@ -76,7 +76,7 @@ export default function PipelinePage() {
 
   const totalPipelineValue = leads
     .filter((l) => !['LOST', 'DO_NOT_CONTACT'].includes(l.status))
-    .reduce((sum, l) => sum + (l.estimatedValue || 1500), 0);
+    .reduce((sum, l) => sum + (l.estimatedValue || 150000), 0);
 
   return (
     <div className="space-y-6 max-w-full mx-auto pb-12">
@@ -106,7 +106,7 @@ export default function PipelinePage() {
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 overflow-x-auto pb-4 items-start min-w-[1200px]">
         {KANBAN_COLUMNS.map((col) => {
           const colLeads = leads.filter((l) => col.statuses.includes(l.status));
-          const colValue = colLeads.reduce((sum, l) => sum + (l.estimatedValue || 1500), 0);
+          const colValue = colLeads.reduce((sum, l) => sum + (l.estimatedValue || 150000), 0);
 
           return (
             <div
@@ -148,7 +148,7 @@ export default function PipelinePage() {
                       <div className="flex items-center justify-between text-[11px]">
                         <OpportunityScoreBadge score={lead.opportunityScore} size="sm" />
                         <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                          {formatCurrency(lead.estimatedValue || 1500)}
+                          {formatCurrency(lead.estimatedValue || 150000)}
                         </span>
                       </div>
 

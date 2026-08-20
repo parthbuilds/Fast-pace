@@ -85,7 +85,7 @@ export default async function DashboardPage() {
 
   const pipelineValue = leads
     .filter((l) => !['WON', 'LOST', 'DO_NOT_CONTACT'].includes(l.status))
-    .reduce((sum, l) => sum + (l.estimatedValue || 1500), 0);
+    .reduce((sum, l) => sum + (l.estimatedValue || 150000), 0);
 
   const wonRevenue = leads
     .filter((l) => l.status === 'WON')

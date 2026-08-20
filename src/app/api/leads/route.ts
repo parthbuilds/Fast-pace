@@ -160,7 +160,7 @@ export async function PATCH(req: NextRequest) {
             industry: updated.business.category,
             location: updated.business.address,
             status: 'ACTIVE',
-            totalBilled: updated.estimatedValue || 1500,
+            totalBilled: updated.estimatedValue || 150000,
           },
         });
       }

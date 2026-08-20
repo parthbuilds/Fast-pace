@@ -25,7 +25,7 @@ export default function ProposalBuilderPage() {
   const [proposedSolution, setProposedSolution] = useState(
     'A custom mobile-first website integrated with automated WhatsApp booking reminders and client CRM.'
   );
-  const [price, setPrice] = useState<number>(1800);
+  const [price, setPrice] = useState<number>(150000);
   const [timelineWeeks, setTimelineWeeks] = useState<number>(3);
   const [maintenance, setMaintenance] = useState(
     '30 days of complimentary priority bug fixes, security patches, and performance optimization included post-launch.'
@@ -51,6 +51,9 @@ export default function ProposalBuilderPage() {
           setLeads(data.leads);
           setSelectedLeadId(data.leads[0].id);
           setTitle(`Digital Transformation & Web System for ${data.leads[0].business.name}`);
+          if (data.leads[0].estimatedValue) {
+            setPrice(data.leads[0].estimatedValue);
+          }
         }
       } catch (err) {
         console.error('Fetch leads for proposal error:', err);
@@ -66,6 +69,9 @@ export default function ProposalBuilderPage() {
     const l = leads.find((item) => item.id === id);
     if (l) {
       setTitle(`Custom Web & Automation Solution for ${l.business.name}`);
+      if (l.estimatedValue) {
+        setPrice(l.estimatedValue);
+      }
       if (l.opportunities?.length > 0) {
         setProposedSolution(`Deploy ${l.opportunities[0].title} with unified WhatsApp integration.`);
       }
@@ -207,7 +213,7 @@ export default function ProposalBuilderPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="text-slate-600 dark:text-slate-400 font-semibold">Price ($ USD)</label>
+              <label className="text-slate-600 dark:text-slate-400 font-semibold">Price (₹ INR)</label>
               <input
                 type="number"
                 value={price}
